@@ -62,10 +62,7 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
         working-directory: ${{ env.BUILD_PATH }}
-
-      # Create dist folder if it doesn't exist
-      - name: Crear carpeta dist (temporal)
-        run: mkdir -p ${{ env.BUILD_PATH }}/dist
+        
       - name: Build with Astro
         run: |
           ${{ steps.detect-package-manager.outputs.runner }} astro build \

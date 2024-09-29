@@ -25,9 +25,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      - name: Upgrade Astro
-        run: npx @astrojs/upgrade beta
-
       - name: Detect package manager
         id: detect-package-manager
         run: |
@@ -54,7 +51,10 @@ jobs:
           node-version: "18"
           cache: ${{ steps.detect-package-manager.outputs.manager }}
           cache-dependency-path: ${{ env.BUILD_PATH }}/${{ steps.detect-package-manager.outputs.lockfile }}
-      
+
+      - name: Upgrade Astro
+        run: npx @astrojs/upgrade beta
+
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5

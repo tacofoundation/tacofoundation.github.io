@@ -1,8 +1,7 @@
 ---
 title: Super Resolution
 img: super-resolution.png
-description: .
-
+description: A dataset of 128 trillion pixels of high-quality low- and high-resolution satellite image pairs for super-resolution applications. 
 huggingface: https://huggingface.co/datasets/tacofoundation/super-resolution
 ---
 

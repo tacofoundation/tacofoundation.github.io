@@ -1,8 +1,7 @@
 ---
 title: Methane
 img: methane.png
-description: .
-
+description: A dataset of 2 trillion pixels of high-quality human-labeled methane emissions from satellite imagery.
 huggingface: https://huggingface.co/datasets/tacofoundation/methane
 ---
 

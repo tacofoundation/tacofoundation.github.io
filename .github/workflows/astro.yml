@@ -25,6 +25,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
+      - name: Upgrade Astro
+        run: npx @astrojs/upgrade beta
+
       - name: Detect package manager
         id: detect-package-manager
         run: |
@@ -63,13 +66,12 @@ jobs:
       # Create dist folder if it doesn't exist
       - name: Crear carpeta dist (temporal)
         run: mkdir -p ${{ env.BUILD_PATH }}/dist
-        
       - name: Build with Astro
         run: |
           ${{ steps.detect-package-manager.outputs.runner }} astro build \
             --site "${{ steps.pages.outputs.origin }}" \
             --base "${{ steps.pages.outputs.base_path }}"
-            --output ${{ env.BUILD_PATH }}/dist
+            --outDir ${{ env.BUILD_PATH }}/dist
         working-directory: ${{ env.BUILD_PATH }}
       
       - name: Upload artifact

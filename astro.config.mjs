@@ -11,6 +11,7 @@ export default defineConfig({
   integrations: [tailwind()],
   output: 'server',
   adapter: vercel(),
-  site: 'https://tacofoundation.github.io'
+  site: 'https://tacofoundation.github.io',
+  outDir: 'dist',
 });
 

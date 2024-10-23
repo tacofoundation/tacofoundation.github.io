@@ -1,0 +1,44 @@
+---
+import { getCollection, render } from "astro:content";  
+import Layout from "../../layouts/Layout.astro";  
+
+export async function getStaticPaths() {
+  const specification = await getCollection("specification");
+  
+  return specification.map((collection) => ({
+    params: { id: collection.slug }, 
+  }));
+}
+
+const { id } = Astro.params;
+const specification = await getCollection("specification");
+
+const Collection = specification.find((collection) => collection.slug === id);
+
+if (!Collection) {
+  throw new Error("Collection no está definida");
+}
+
+const { slug, data } = Collection;
+
+if (!data) {
+  throw new Error("Data no está definida en la colección");
+}
+
+const { title, img } = data;
+const { Content } = await render(Collection);
+---
+
+<Layout title={`${title}`}>
+  <div class="max-w-[80%] mx-auto p-8">
+    <a href="/specification" class="hover:underline opacity-70 mb-4 block text-white">← Back to Previous</a>
+  
+    <!-- Contenido -->
+    <article class="max-w-[80%] prose prose-lg prose-invert mx-auto">
+      <div class="overflow-x-auto">
+        <Content />
+      </div>
+    </article>
+  </div>
+</Layout>
+

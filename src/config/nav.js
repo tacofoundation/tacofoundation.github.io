@@ -1,6 +1,6 @@
 export const navItems = [
   { name: 'Home', href: '/' },
-  { name: 'Overview', href: '/overview' },
+  { name: 'Specification', href: '/specification' },
   { name: 'Contributing', href: '/contributing' },
   { name: 'Dataset', href: '/dataset' },
   // { name: 'Sample Datasets', href: '/sample-datasets' }, 

@@ -1,0 +1,41 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const specifications = await getCollection("specification");
+---
+
+<Layout title="Welcome to TacoFundation">
+  <section aria-label="specifications" class="mt-10">
+    <div class="px-4 mx-auto max-w-screen-xl">
+      <div class="grid gap-6 md:grid-cols-2">
+        {specifications.map(Collection => {
+          const { slug, data } = Collection;
+          const { title, img } = data;
+
+          if (!slug || !data) {
+            console.error('Error en collection:', Collection);
+            return null;
+          }
+
+          return (
+          <a href={`/specification/${slug}`} class="block w-full">
+            <article class="flex flex-col items-center text-center p-8 bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-105 max-w-lg mx-auto"> 
+                <div class="flex justify-center">
+                  <img
+                    class="h-60 w-60 rounded" 
+                    src={`/${img}`} 
+                    alt={title}
+                  />
+                </div>
+              <h2 class="mt-4 text-xl font-bold leading-tight text-white"> 
+                  {title}
+              </h2>
+            </article>
+          </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -10,11 +10,11 @@ const dataset = defineCollection({
   }),
 });
 
-// Definición de la colección para el overview
-const overview = defineCollection({
+// Definición de la colección para el specification
+const specification = defineCollection({
   schema: z.object({
     title: z.string(),
-
+    img: z.string(),
   }),
 });
 
@@ -22,9 +22,8 @@ const overview = defineCollection({
 const contributing = defineCollection({
   schema: z.object({
     title: z.string(),
-
   }),
 });
 
 // Exporta ambas colecciones
-export const collections = { dataset, overview, contributing };
+export const collections = { dataset, specification, contributing };

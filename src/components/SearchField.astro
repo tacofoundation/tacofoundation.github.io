@@ -1,0 +1,53 @@
+---
+import "@pagefind/default-ui/css/ui.css";
+
+interface Props { readonly id?: string; readonly className?: string; }
+const { id, className } = Astro.props as Props;
+const divProps = { ...(id ? { id } : {}), ...(className ? { class: className } : {}) };
+---
+
+<div {...divProps} data-pagefind-ui data-bundle-path="/pagefind/"></div>
+
+<script>
+  import { PagefindUI } from "@pagefind/default-ui";
+  window.addEventListener("DOMContentLoaded", () => {
+    const allSelector = "[data-pagefind-ui]";
+    for (const el of document.querySelectorAll(allSelector)) {
+      const elSelector = [
+        ...(el.id ? [`#${el.id}`] : []),
+        ...[...el.classList.values()].map((c) => `.${c}`),
+        allSelector,
+      ].join("");
+      const bundlePath = el.getAttribute("data-bundle-path");
+
+      new PagefindUI({
+        element: elSelector,
+        bundlePath: "/pagefind/",  // Ruta directa para asegurar compatibilidad
+        showImages: false,
+        debounceTimeoutMs: 100,
+      });
+
+      const input = el.querySelector<HTMLInputElement>(`input[type="text"]`);
+      input?.focus();
+
+      const url = new URL(window.location.href);
+      const params = new URLSearchParams(url.search);
+      const query = params.get("q");
+
+      if (query && input) {
+        input.value = query;
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+
+      input?.addEventListener("input", (e) => {
+        const input = e.target as HTMLInputElement;
+        const url = new URL(window.location.href);
+        const params = new URLSearchParams(url.search);
+        params.set("q", input.value);
+        window.history.replaceState({}, "", `${url.pathname}?${params}`);
+      });
+    }
+  });
+</script>
+
+<script src="/pagefind/pagefind.js" data-bundle-path="/pagefind/"></script>

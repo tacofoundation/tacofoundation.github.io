@@ -24,8 +24,6 @@ const { title } = Astro.props;
 		<title>{title}</title>
 		<ClientRouter />
 		
-		<!-- Aquí está el script para Pagefind -->
-		<script src="/pagefind.js" defer></script>
 	</head>
 
 	<body>
@@ -34,7 +32,6 @@ const { title } = Astro.props;
 	</body>
 </html>
 
-<!-- El script de Alpine.js debe seguir después del body -->
 <script src="https://unpkg.com/alpinejs" defer></script>
 
 <style is:global>

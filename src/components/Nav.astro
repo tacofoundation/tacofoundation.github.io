@@ -1,6 +1,5 @@
 ---
 import { navItems } from "../config/nav.js";
-import SearchField from "./SearchField.astro";
 ---
 
 <nav class="bg-[#13151a]" x-data="{ open: false, openModal: false }">
@@ -48,35 +47,6 @@ import SearchField from "./SearchField.astro";
         >
           <i class="fab fa-github text-3xl"></i>
         </a>
-
-        <!-- 4. Input de búsqueda que abre el modal -->
-        <div class="relative hidden md:block">
-          <div
-            class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
-          >
-            <svg
-              class="w-4 h-4 text-gray-500 dark:text-gray-400"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 20 20"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"></path>
-            </svg>
-          </div>
-          <input
-            type="text"
-            id="search-navbar"
-            class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search..."
-            @click="openModal = true; $nextTick(() => $refs.modalInput.focus())"
-          />
-        </div>
       </div>
     </div>
 
@@ -155,68 +125,7 @@ import SearchField from "./SearchField.astro";
         }
       </ul>
 
-      <!-- Campo de búsqueda en el menú de hamburguesa -->
-      <div class="relative my-4">
-        <div
-          class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
-        >
-          <svg
-            class="w-4 h-4 text-gray-500 dark:text-gray-400"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 20 20"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"></path>
-          </svg>
-        </div>
-        <input
-          type="text"
-          id="search-navbar-small"
-          class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Search..."
-          @click="openModal = true; $nextTick(() => $refs.modalInput.focus())"
-        />
-      </div>
     </div>
   </div>
 
-  <!-- Modal de búsqueda -->
-  <div
-    x-show="openModal"
-    @click.away="openModal = false"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-  >
-    <div class="bg-white rounded-lg p-6 w-11/12 md:w-1/3 relative" @click.stop>
-      <!-- Botón para cerrar el modal -->
-      <button
-        @click="openModal = false"
-        class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 focus:outline-none"
-      >
-        <svg
-          class="w-5 h-5"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-      </button>
-
-      <!-- Contenedor con scroll para los resultados de búsqueda -->
-      <div class="mt-4 max-h-80 overflow-y-auto">
-        <SearchField id="modal-search" className="block w-full p-2" />
-      </div>
-    </div>
-  </div>
 </nav>

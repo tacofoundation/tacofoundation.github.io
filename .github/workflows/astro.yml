@@ -24,7 +24,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
+      - name: Upgrade Astro
+        run: npx @astrojs/upgrade beta
       - name: Detect package manager
         id: detect-package-manager
         run: |
@@ -44,17 +46,13 @@ jobs:
             echo "Unable to determine package manager"
             exit 1
           fi
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "18"
           cache: ${{ steps.detect-package-manager.outputs.manager }}
           cache-dependency-path: ${{ env.BUILD_PATH }}/${{ steps.detect-package-manager.outputs.lockfile }}
-
-      - name: Upgrade Astro
-        run: npx @astrojs/upgrade beta
-
+      
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
@@ -62,7 +60,7 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
         working-directory: ${{ env.BUILD_PATH }}
-        
+
       - name: Build with Astro
         run: |
           ${{ steps.detect-package-manager.outputs.runner }} astro build \
@@ -70,7 +68,7 @@ jobs:
             --base "${{ steps.pages.outputs.base_path }}" \
             --outDir ${{ env.BUILD_PATH }}/dist
         working-directory: ${{ env.BUILD_PATH }}
-      
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

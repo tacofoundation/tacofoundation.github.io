@@ -25,5 +25,14 @@ const contributing = defineCollection({
   }),
 });
 
+
+// Definición de la colección para el Map
+const map = defineCollection({
+  schema: z.object({
+    title: z.string(),
+  }),
+});
+
+
 // Exporta ambas colecciones
-export const collections = { dataset, specification, contributing };
+export const collections = { dataset, specification, contributing, map };

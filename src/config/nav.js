@@ -3,6 +3,5 @@ export const navItems = [
   { name: 'Specification', href: '/specification' },
   { name: 'Contributing', href: '/contributing' },
   { name: 'Dataset', href: '/dataset' },
-  // { name: 'Sample Datasets', href: '/sample-datasets' }, 
-  // { name: 'Spec', href: '/spec' },
+  { name: 'Map', href: '/map' },
 ];

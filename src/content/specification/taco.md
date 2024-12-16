@@ -4,7 +4,7 @@ img: taco.png
 ---
 
 
-<img src="https://raw.githubusercontent.com/tacofoundation/tacofoundation.github.io/refs/heads/main/public/taco.png" width="20%" style="float: right; margin-left: 10px;">
+<img src="https://raw.githubusercontent.com/tacofoundation/tacofoundation.github.io/refs/heads/main/public/taco.png" width="30%" style="float: right; margin-left: 10px;">
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1z0cxbY2SgSdAuV2134HFFjdApej1fXqm?usp=sharing)
 
@@ -27,7 +27,7 @@ TACO is designed around the [FAIR](https://www.go-fair.org/fair-principles/) pri
 - **Findability**: EO data is not structured for easy discovery. To improve dataset accessibility on platforms like Google Dataset Search, DataCite Search, and OpenAIRE Explore, data providers are typically required to understand and implement multiple specifications, such as STAC Collection, Croissant, and DataCite. The [TACO Toolbox](https://tacofoundation.github.io/taco-toolbox) simplifies this process by providing offering a well-defined Pydantic schema, enabling seamless automatic conversion into these specifications, or all three simultaneously.
 
 <center>
-<img src="/diagram01.png" width="85%" style="float: center">
+<img src="/diagram01.png" width="70%" style="float: center">
 </center>
 
 <sup>__Figure 01__: *Data provides enter data & metadata in a Pydantic DataModel. The [taco-toolbox](https://tacofoundation.github.io/taco-toolbox) then generates a TACO-compliant dataset. The data users by using the "taco-readers" can subsequently extract the metadata and convert it into Markdown, JSON, or JSON-LD files, ensuring compatibility with various metadata specifications.*</sup>
@@ -35,7 +35,7 @@ TACO is designed around the [FAIR](https://www.go-fair.org/fair-principles/) pri
 - **Accessibility**: TACO organizes datasets as collections of samples with similar data and metadata stored in Tortilla files. The dataset structure has two levels: (1) Collection, and (2) Sample. A **`Collection`** describes metadata at the dataset level and helps search engines find datasets on the web and for data users get a general idea of what the dataset is about. Data users can obtain the Dataset `Collection` metadata in one or multiple specifications, as discussed in the Findability section. The `Sample` represents the fundamental unit of a dataset, encapsulating a single data instance.
 
 <center>
-<img src="/diagram02.png" width="90%" style="float: center">
+<img src="/diagram02.png" width="80%" style="float: center">
 </center>
 
 <sup>__Figure 02__: *TACO toolbox adopts a structure similar to STAC, organizing the data into collections, and samples. Users can use different 
@@ -46,7 +46,7 @@ fields to split the dataset.*</sup>
 - **Reusability:** Since each Tortilla is represented as a DataFrame at the top level, integration between TACO-compliant dataset can be achieved through a simple concatenation operation.
 
 <center>
-<img src="/diagram03.png" width="90%" style="float: center">
+<img src="/diagram03.png" width="80%" style="float: center">
 </center>
 
 <sup>__Figure 03__: This example demonstrates the integration of all methane emission datasets.**TACO** facilitate the development of `universal` data loader. The blue line illustrates the connection between data users and providers through client libraries (taco-reader).</sup>
@@ -70,7 +70,7 @@ The primary goals of the TACO specification are:
 This is version `0.5.0` of the TACO specification. Future versions **MUST** remain backward compatible with this one. The mandatory fields are:
 
 <center>
-<img src="/diagram04.png" width="100%" style="float: center">
+<img src="/diagram04.png" width="90%" style="float: center">
 </center>
 
 <sup>__Figure 04__: This diagram visually represents the internal structure of a *TACO* file, highlighting how data and metadata are organized within the file format.</sup>

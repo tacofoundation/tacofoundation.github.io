@@ -3,7 +3,7 @@ title: "The Tortilla specification"
 img: tortilla.png
 ---
 
-<img src="https://raw.githubusercontent.com/tacofoundation/tacofoundation.github.io/refs/heads/main/public/tortilla.png" width="12%" style="float: right; margin-left: 10px;">
+<img src="https://raw.githubusercontent.com/tacofoundation/tacofoundation.github.io/refs/heads/main/public/tortilla.png" width="22%" style="float: right; margin-left: 10px;">
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1LfyOsRtm4TDUZmFPFOdk3EXV2iWYREng?usp=sharing)
 

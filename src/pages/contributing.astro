@@ -12,7 +12,13 @@ const { Content } = await render(contributingEntries[0]);
 ---
 
 <Layout title="Contributing">
-  <main class="px-6 py-8 text-white">
-    <Content class="prose lg:prose-xl" /> 
-  </main>
+  <div class="max-w-[80%] mx-auto p-8">
+  
+    <!-- Contenido -->
+    <article class="max-w-[80%] prose prose-lg prose-invert mx-auto">
+      <div class="overflow-x-auto">
+        <Content />
+      </div>
+    </article>
+  </div>
 </Layout>

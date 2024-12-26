@@ -29,7 +29,7 @@ const { title, img } = data;
 const { Content } = await render(Collection);
 ---
 
-<Layout title={`${title}`}>
+  <Layout title={`${title}`}>
   <div class="max-w-[80%] mx-auto p-8">
     <a href="/specification" class="hover:underline opacity-70 mb-4 block text-white">← Back to Previous</a>
   
@@ -43,10 +43,46 @@ const { Content } = await render(Collection);
 </Layout>
 
 <script>
-  // Si necesitas transformar dinámicamente imágenes
+  // Agregar clase 'text-base' a todos los <sup>
+  document.querySelectorAll("sup").forEach((sup) => {
+    sup.classList.add("text-base");
+  });
+
+
+  // Agregar estilos a las tablas
+  document.querySelectorAll("table").forEach((table) => {
+    table.classList.add(
+      "table-auto",         
+      "border-gray-300",    
+      "overflow-hidden"   
+    );
+    const thead = table.querySelector("thead");
+    if (thead) {
+      thead.classList.add(
+        "bg-gray-800", 
+        "text-white"  
+      );
+    }
+    const tds = table.querySelectorAll("td, th");
+    tds.forEach((td) => {
+      td.classList.add(
+        "border",        
+        "border-gray-300", 
+        "p-4"             
+      );
+    });
+  });
+
+
+  // Mejorar el zoom en imágenes
   document.querySelectorAll("img").forEach((img) => {
     img.classList.add(
-    'transform', 'transition', 'duration-300', 'hover:scale-110');
+      "transform",
+      "transition",
+      "duration-500", // Hacerlo más lento
+      "hover:scale-105" // Zoom más pequeño
+    );
   });
+</script>
 
 

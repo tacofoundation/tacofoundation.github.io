@@ -19,7 +19,7 @@ The term "data user" refers to any individual or system accessing the data, "dat
 
 ## Overview
 
-A **TACO** is a specification that extends the common structure of [Tortilla](https://tacofoundation.github.io/tortilla-spec) files. **TACO** is inspired by the [STAC Collection](https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md) and includes additional fields to enable the automatic generation of [Croissant](https://docs.mlcommons.org/croissant/docs/croissant-spec.html), [DataCite metadata](https://schema.datacite.org/), and [Datacards](https://arxiv.org/abs/2204.01075).
+A **TACO** is a specification that extends the common structure of [Tortilla](https://tacofoundation.github.io/specification/tortilla/) files. **TACO** is inspired by the [STAC Collection](https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md) and includes additional fields to enable the automatic generation of [Croissant](https://docs.mlcommons.org/croissant/docs/croissant-spec.html), [DataCite metadata](https://schema.datacite.org/), and [Datacards](https://arxiv.org/abs/2204.01075).
 
 
 TACO is designed around the [FAIR](https://www.go-fair.org/fair-principles/) principles:
@@ -39,7 +39,7 @@ TACO is designed around the [FAIR](https://www.go-fair.org/fair-principles/) pri
 </center>
 
 <sup>__Figure 02__: *TACO toolbox adopts a structure similar to STAC, organizing the data into collections, and samples. Users can use different 
-fields to split the dataset.*</sup>
+fields to split the dataset and create "Catalogs" on-the-fly.*</sup>
 
 - **Interoperability**: TACO uses Tortilla in the backend, which provide fast partial and parallel reading capabilities. See [Tortilla](https://tacofoundation.github.io/specification/tortilla/) specification for more details.
 
@@ -63,7 +63,7 @@ The primary goals of the TACO specification are:
 
 4. **User-Friendly Structure**: Organize datasets into a clear hierarchical structure (Collection and Sample) to facilitate easy navigation and retrieval of data.
 
-5. **Efficient Data Handling**: Utilize the capabilities of Tortilla files for efficient partial reading and parallel processing to improve data access speeds.
+5. **Efficient Data Handling**: Utilize the capabilities of Tortilla files for efficient partial reading and parallel processing to improve data access and analysis.
 
 ## Format
 
@@ -75,11 +75,11 @@ This is version `0.5.0` of the TACO specification. Future versions **MUST** rema
 
 <sup>__Figure 04__: This diagram visually represents the internal structure of a *TACO* file, highlighting how data and metadata are organized within the file format.</sup>
 
-TACO extents the Tortilla specification by adding three fields (see bellow). With these changes, the available **free space is reduced to 134 bytes, compared to 150 bytes in Tortilla**.
+TACO extents the Tortilla specification by adding three fields (see bellow). With these changes, the available **free space is reduced to 158 bytes, compared to 174 bytes in Tortilla**.
 
 ### The Magic Number (MB)
 
-A **2-byte** identifier at the start of each file (**#y** in hex) ensures that the file is recognized as a valid Tortilla format. 
+A **2-byte** identifier at the start of each file (**#y** in hex) ensures that the file is recognized as a valid TACO format.
 
 ```python
 int.from_bytes(b'WX', byteorder='little')
@@ -119,7 +119,7 @@ A TACO Collection is simply an JSON object in UTF-8 encoding. The TACO Collectio
 <img src="/diagram05.png" width="100%" style="float: center">
 </center>
 
-<sup>__Figure 05__: TACO Collection Schema, highlighting core metadata fields such as licensing, spatial and temporal extents, dataset provider, and versioning information for both the dataset and TACO. Other fields shown are RECOMMENDED but not mandatory. The Responsible AI (RAI*) field is highly RECOMMENDED for documenting potential biases and ethical considerations related to the dataset.</sup>
+<sup>__Figure 05__: TACO Collection Schema, highlighting core metadata fields such as licensing, spatial and temporal extents, dataset provider, and versioning information for both the dataset and TACO. Other fields shown are RECOMMENDED but not mandatory. The Responsible AI (RAI*) fields are highly RECOMMENDED for documenting potential biases and ethical considerations related to the dataset.</sup>
 
 ### TACO Sample
 
@@ -130,7 +130,6 @@ In TACO, a sample consists of a single data point. The binary data is located wi
 ### Extent Object
 
 Describes the spatial and temporal coverage of the entire dataset. Both spatial and temporal extents are required.
-
 
 | Field  | Type | Required | Description |
 | -------- | ------------------------------------------------- | --------------------------------|-------------------------------------- |
@@ -291,7 +290,7 @@ The Label Extension offers a standardized framework for defining and describing 
  
 #### The Scientific Extension
 
-This extension standardizes how datasets link to related scientific publications, providing metadata for proper citation and referencing.
+This extension standardizes how datasets link to related scientific publications, providing metadata for proper citation and referencing. The **Scientific Extension** is based on the [STAC Extension](https://github.com/stac-extensions/scientific) proposed by [Matthias Mohr](https://github.com/m-mohr).
 
 ##### Scientific Object
 

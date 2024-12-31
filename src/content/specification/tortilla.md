@@ -60,7 +60,7 @@ An **8-byte** fixed-size section that indicates where the footer starts within t
 An **8-byte** fixed-size section that specifies the length of the footer in bytes.
 
 
-### The Partitions (PA)
+### The Data Partition (DP)
 
 An **8-byte** fixed-size field specifies the number of chunks in a Tortilla file. If it is `1`, the file extension **MUST** be `.tortilla`. If it is greater than `1`, the extension **MUST** be `.part.tortilla`, and the chunks **MUST** be numbered in ascending order. For example, a 100 GB `soyuna.tortilla` file split into 5 chunks of 20 GB each would result in:
 
@@ -137,21 +137,24 @@ The Tortilla format uses the following proposed media type to identify files com
 
 ### Why not use Parquet?
 
-[Parquet](https://parquet.apache.org/) is a column-oriented data file format optimized for efficient storage and retrieval of structured data. While many data platforms encourage using Parquet to store image data, their thinking of an image centers on small, RGB uint8 images rather than the complex, high-resolution imagery typically associated with Earth Observation.
+[Parquet](https://parquet.apache.org/) is a column-oriented data file format optimized for efficient storage and retrieval of structured data. While some platforms, such as HuggingFace, promote storing image data within Parquet files, they mainly think around about small, RGB uint8 images. This is quite different from the detailed, high-res images often used in Earth Observation (EO).
 
-In Earth Observation, a frequent requirement is to read small portions of an image (commonly referred to as partial reads), and this typically happens without users even noticing (e.g., check any raster plotting function in your favorite programming language). Spatial partial reads are straightforward with formats like [GeoTIFF](https://gdal.org/en/stable/drivers/raster/gtiff.html), where the `byte location` of spatial chunks is stored in the file header. This enables direct access to specific parts of the image **without loading the entire file**.
+In EO, a frequent requirement is to read small portions of an image (commonly referred to as partial reads), and this typically happens without users even noticing (e.g., check any raster plotting function in your favorite programming language). Spatial partial reads are straightforward with formats like [GeoTIFF](https://gdal.org/en/stable/drivers/raster/gtiff.html), where the `byte location` of spatial chunks is stored in the file header. This enables direct access to specific parts of the image **without loading the entire file**.
 
-However, when multiple images are serialized into a [column chunk](https://parquet.apache.org/docs/file-format/data-pages/columnchunks/) of a Parquet file, the header information for these images becomes inaccessible to the data user. As a result, **users must read the entire chunk to access any part of the images**, which is highly inefficient for large images, as we mentioned earlier. Without support for partial reads, the images lose their cloud-optimized properties, even if the original format was **[COG](https://cogeo.org/)**.
+However, when multiple images are serialized into a [column chunk](https://parquet.apache.org/docs/file-format/data-pages/columnchunks/) of a Parquet file, the **header location** for these images becomes inaccessible to the data user. As a result, **users must load into memory the entire chunk to access any part of the images**, which is highly inefficient for large EO images. Without support for partial reads, the images lose their cloud-optimized properties, even if the original format was **[COG](https://cogeo.org/)**.
 
 In constrast, Tortilla internally use Parquet **ONLY** for its primary purpose: **managing number and string data**. By embedding all metadata in the Parquet FOOTER, Tortilla allows efficient, streamlined access to the entire metadata with a single request. Image data, on the other hand, is stored separately in a Binary Large Object (BLOB) format within the DATA pile (see the Format section). Leveraging [GDAL’s Virtual File System (VFS)](https://gdal.org/en/stable/user/virtual_file_systems.html), Tortilla provides an **advanced indexing system** that ensures all samples retain their cloud-optimized functionality. This design enables seamless, scalable workflows that go beyond what Parquet alone can support.
 
 ### Why not use Zarr?
 
-There are three key differences between Zarr and Tortilla:
+We encourage data providers to consider using [Zarr](https://zarr.readthedocs.io/en/stable/) as it flexibility can be useful for some use cases. There are three key differences between Zarr and Tortilla:
 
-- **Tortilla is a strict format created specifically for ready-to-use Earth Observation machine learning datasets, while Zarr is a general-purpose format**. A Tortilla file is simple a collection of Samples which share a common metadata structure. The data and metadata are kept entirely separate. This structure enables users to access all metadata by reading the FOOTER in a single request, regardless of the dataset size. This is not possible with Zarr, where metadata is scattered throughout the tree structure.
+- **Tortilla is a `Collection` format while Zarr is an DataCube format**. A Tortilla file is simple a **collection of objects** which share a common metadata structure. A **sample** can be an image, vector, or any object that can be serialized into a binary format. The data and metadata are kept entirely separate. The metadata is stored in a Parquet file, while the data is stored in a BLOB. The Tortilla format enables users to access all metadata by a ONE request, regardless of the dataset size. This is not possible with Zarr, where metadata is scattered throughout its tree structure in JSON files.
 
-- **Tortilla is a portable and self-contained file format, whereas Zarr is not**. A Zarr object is organized in a **FOLDER** tree structure, with `core metadata` stored in JSON files and `data` in binary files. It supports different data structures (e.g. data diversity) by adding subfolders that maintain the same organizational structure. As a result, a Zarr object can potentially contain hundreds or thousands of files, depending on the chunking strategy and data volume. Data providers should consider if the nature of Zarr could complicate portability to data users.
+- **Tortilla is a portable and self-contained file format, whereas Zarr is not**. A Tortilla file is a single file. Although it can be split into multiple partitions, each partition is independently readable. In contrast, A Zarr object is organized in a **FOLDER** tree structure, with `metadata` stored in JSON files and `data` in binary files. The data is chunked into smaller pieces (defined by the data provider), which are stored in separate files. As a result, a Zarr object can potentially contain hundreds, thousands, or millions of files, depending on the chunking strategy and data volume.
+
+**All the Tortillas share some common characteristics, while Zarr objects does not provide a standard way to store metadata.** The Tortilla format is created specifically for ready-to-use Earth Observation machine learning datasets, as we do not try to be a general-purpose format, it permits us to force data providers to follow a standard, which is essential for the interoperability of datasets.
+
 
 - **Tortilla is better suited for static datasets, while Zarr is more appropriate for dynamic datasets**. The structure of Tortilla makes appending or modifying data after the file is created a challenging task. While editing is possible using the [taco-toolbox](https://tacofoundation.github.io/taco-toolbox), it can be slow and may require significant memory and storage, especially with large datasets. In contrast, Zarr is designed to efficiently handle continuous growth and shrinkage, making it a better choice for dynamic datasets.
 

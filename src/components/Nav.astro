@@ -23,7 +23,7 @@ import { navItems } from "../config/nav.js";
         {
           navItems.map((item) => (
             <li>
-              <a href={item.href} class="text-white hover:text-yellow-500">
+              <a href={item.href} class="nav-link">
                 {item.name}
               </a>
             </li>
@@ -36,13 +36,13 @@ import { navItems } from "../config/nav.js";
         <a href="https://huggingface.co/tacofoundation">
           <img
             src="/hf-logo.png"
-            class="transition duration-300 h-10 w-10"
+            class="transition duration-300 h-10 w-10 hover:opacity-80"
             alt="Hugging Face"
           />
         </a>
         <a
           href="https://github.com/tacofoundation"
-          class="text-white hover:text-yellow-500"
+          class="text-white hover:text-yellow-500 transition-colors duration-300"
           aria-label="GitHub"
         >
           <i class="fab fa-github text-3xl"></i>
@@ -67,13 +67,13 @@ import { navItems } from "../config/nav.js";
         <a href="https://huggingface.co/tacofoundation" class="mr-2">
           <img
             src="/hf-logo.png"
-            class="h-9 w-9 transition duration-300"
+            class="h-9 w-9 transition duration-300 hover:opacity-80"
             alt="Hugging Face"
           />
         </a>
         <a
           href="https://github.com/tacofoundation/tortilla-python"
-          class="text-white hover:text-yellow-500 transition duration-300 mr-2"
+          class="text-white hover:text-yellow-500 transition-colors duration-300 mr-2"
           aria-label="GitHub"
         >
           <i class="fab fa-github text-3xl"></i>
@@ -83,7 +83,7 @@ import { navItems } from "../config/nav.js";
         <button
           type="button"
           @click="open = !open"
-          class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+          class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:focus:ring-gray-600 transition-colors duration-300"
           aria-controls="navbar-search"
           aria-expanded="false"
         >
@@ -113,10 +113,10 @@ import { navItems } from "../config/nav.js";
       >
         {
           navItems.map((item) => (
-            <li>
+            <li class="relative">
               <a
                 href={item.href}
-                class="block py-2 text-white hover:text-yellow-500"
+                class="nav-link block py-2"
               >
                 {item.name}
               </a>
@@ -124,8 +124,46 @@ import { navItems } from "../config/nav.js";
           ))
         }
       </ul>
-
     </div>
   </div>
-
 </nav>
+
+<style>
+  .nav-link {
+    position: relative;
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    display: inline-block;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -4px;
+    left: 0;
+    background-color: #EAB308; /* yellow-500 */
+    transition: width 0.3s ease;
+  }
+
+  .nav-link:hover {
+    color: #EAB308; /* yellow-500 */
+  }
+
+  .nav-link:hover::after {
+    width: 100%;
+  }
+
+  /* Adjust mobile menu link styles */
+  @media (max-width: 768px) {
+    .nav-link {
+      width: fit-content;
+    }
+    
+    .nav-link::after {
+      bottom: 0;
+    }
+  }
+</style>

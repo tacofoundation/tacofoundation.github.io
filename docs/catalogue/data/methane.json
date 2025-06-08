@@ -1,0 +1,16 @@
+{
+  "id": "methane",
+  "title": "Methane Detection",
+  "tags": ["methane", "satellite", "GHG"],
+  "description": "Satellite-derived methane emission estimates from plumes.",
+  "image": "/images/methane.png",
+  "snippets": {
+    "run": "fused.run('UDF_Methane_Detection')",
+    "load": "fused.load('https://github.com/...')"
+  },
+  "code": "console.log('Methane detection UDF example');",
+  "links": {
+    "catalog": "https://fused.io/workbench/catalog/Methane",
+    "github": "https://github.com/fusedio/..."
+  }
+}

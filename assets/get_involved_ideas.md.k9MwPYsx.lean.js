@@ -1,0 +1,1 @@
+import{_ as e,c as t,o as a}from"./chunks/framework.BjlC_BXf.js";const l=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"get_involved/ideas.md","filePath":"get_involved/ideas.md"}'),o={name:"get_involved/ideas.md"};function s(n,r,d,i,c,_){return a(),t("div")}const m=e(o,[["render",s]]);export{l as __pageData,m as default};

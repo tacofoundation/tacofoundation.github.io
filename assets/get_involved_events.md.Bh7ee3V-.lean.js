@@ -1,0 +1,1 @@
+import{_ as e,c as t,o as n}from"./chunks/framework.BjlC_BXf.js";const p=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"get_involved/events.md","filePath":"get_involved/events.md"}'),a={name:"get_involved/events.md"};function o(s,r,c,_,d,i){return n(),t("div")}const l=e(a,[["render",o]]);export{p as __pageData,l as default};

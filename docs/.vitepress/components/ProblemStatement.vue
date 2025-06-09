@@ -4,8 +4,8 @@
       <lucide-alert-triangle class="text-red-500 w-16 h-16" />
       <h2 class="!text-[2.5rem] !font-bold">The Structural Bottleneck</h2>
       <p class="max-w-4xl !text-[1.25rem] !leading-relaxed">
-        There is no standard for AI-ready Earth Observation datasets. The 
-        data remains fragmented, siloed, and difficult to unify, holding 
+        There is no standard for AI-ready Earth Observation datasets. The
+        data remains fragmented, siloed, and difficult to unify, holding
         back the full potential of planetary-scale insight.
       </p>
     </div>
@@ -15,7 +15,7 @@
         <lucide-shuffle class="text-red-500 w-8 h-8 mx-auto mb-4" />
         <h3 class="!text-black dark:!text-white !font-semibold !text-lg mb-2">Ad Hoc File Structures</h3>
         <p class="!text-black dark:!text-gray-300 !text-sm">
-          Data producers adopt inconsistent organizational patterns, making datasets difficult to interpret, 
+          Data producers adopt inconsistent organizational patterns, making datasets difficult to interpret,
           compare, and integrate across different projects.
         </p>
       </div>
@@ -50,3 +50,5 @@
 
   </section>
 </template>
+
+

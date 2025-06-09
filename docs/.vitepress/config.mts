@@ -15,18 +15,21 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Get Involved', link: '/get_involved' }
-      { text: 'Tutorials', link: '/tutorials' },
+      { text: 'Specification', link: '/specification' },
+      { text: 'Documentation', link: '/documentation' },
       { text: 'Contributing', link: '/contribute' },
       { text: 'Catalog', link: '/catalogue' },
+      { text: 'Publications', link: '/publications' },
+
+      
     ],
 
     sidebar: {
-      '/get_involved/': [
+      '/documentation/': [
         {
-          text: 'Get Involved',
+          text: 'Documentation',
           collapsed: false,
-          items: generateSidebarFromDir('get_involved')
+          items: generateSidebarFromDir('documentation')
         }
       ]
     },

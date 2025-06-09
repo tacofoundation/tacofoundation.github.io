@@ -4,9 +4,9 @@
       <lucide-alert-triangle class="text-red-500 w-16 h-16" />
       <h2 class="!text-[2.5rem] !font-bold">The Structural Bottleneck</h2>
       <p class="max-w-4xl !text-[1.25rem] !leading-relaxed">
-        While geospatial communities have long relied on standardized formats like NetCDF and GeoTIFF, AI-ready datasets
-        derived from Earth Observation lack equivalent conventions. Over 500 AI-ready EO datasets exist, yet they remain
-        fragmented and difficult to integrate.
+        There is no standard for AI-ready Earth Observation datasets. The 
+        data remains fragmented, siloed, and difficult to unify, holding 
+        back the full potential of planetary-scale insight.
       </p>
     </div>
 
@@ -15,8 +15,8 @@
         <lucide-shuffle class="text-red-500 w-8 h-8 mx-auto mb-4" />
         <h3 class="!text-black dark:!text-white !font-semibold !text-lg mb-2">Ad Hoc File Structures</h3>
         <p class="!text-black dark:!text-gray-300 !text-sm">
-          Data producers adopt inconsistent organizational patterns, making datasets difficult to navigate and
-          understand across different projects.
+          Data producers adopt inconsistent organizational patterns, making datasets difficult to interpret, 
+          compare, and integrate across different projects.
         </p>
       </div>
 
@@ -48,22 +48,5 @@
       </div>
     </div>
 
-    <div class="mt-11 rounded-xl !bg-red-50 dark:!bg-red-900 p-7 border-l-4 !border-red-400 dark:!border-red-600">
-      <h3 class="!m-[5px] !font-bold !text-2xl mb-2 !text-gray-900 dark:!text-white !text-left">The FAIR Principles Gap</h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 !text-left !text-base !leading-[1.6] !text-gray-800 dark:!text-gray-200">
-        <div>
-          <p><strong>Findability:</strong> Lack of standardized metadata schemas limits discoverability in search
-            engines and data catalogs.</p>
-          <p class="mt-4"><strong>Accessibility:</strong> Manual downloads and custom APIs instead of scalable,
-            cloud-native access patterns.</p>
-        </div>
-        <div>
-          <p><strong>Interoperability:</strong> Varying formats with different byte layouts, chunking strategies, and
-            metadata conventions create integration barriers.</p>
-          <p class="mt-4"><strong>Reusability:</strong> Missing licenses, provenance, and documentation make datasets
-            difficult to audit, cite, or extend.</p>
-        </div>
-      </div>
-    </div>
   </section>
 </template>

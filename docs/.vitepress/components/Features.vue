@@ -42,10 +42,6 @@ const features = [
         <h2 class="!text-[3rem] md:text-5xl !font-extrabold !mb-6">
           Why Choose TACO?
         </h2>
-        <p class="text-xl inline-block max-w-3xl mx-auto leading-relaxed">
-          Built for the future of Earth Observation AI, TACO provides the foundation 
-          for scalable, reproducible, and interoperable scientific progress.
-        </p>
       </div>
 
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 ">

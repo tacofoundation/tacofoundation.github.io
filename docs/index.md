@@ -3,11 +3,10 @@ layout: home
 
 hero:
   name: "The TACO Specification"
-  text: "The Missing Piece: Standardising for AI-ready Earth Observation Datasets"
+  text: ""
   tagline: >
-    A FAIR-compliant, cloud-optimized specification defining a formal data model, binary file format, 
-    and unified API for organizing AI-ready Earth Observation datasets. Built on proven technologies 
-    like GDAL and Apache Parquet for seamless multi-language integration.
+    A FAIR-compliant, cloud-native specification that defines a formal and scalable format 
+    for packaging and sharing AI-ready Earth Observation datasets.
 
   image:
     src: /image/taco.png
@@ -21,6 +20,8 @@ hero:
       text: View Implementation
       link: /api-examples
 ---
+
+
 
 <script setup>
 import ProblemStatement from './.vitepress/components/ProblemStatement.vue'

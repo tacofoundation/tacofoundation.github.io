@@ -15,10 +15,10 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
+      { text: 'Get Involved', link: '/get_involved' }
       { text: 'Tutorials', link: '/tutorials' },
       { text: 'Contributing', link: '/contribute' },
       { text: 'Catalog', link: '/catalogue' },
-      { text: 'Get Involved', link: '/get_involved' }
     ],
 
     sidebar: {

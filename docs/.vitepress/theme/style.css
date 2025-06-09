@@ -204,3 +204,8 @@
   padding: 0.6rem 1.2rem !important;
 }
 
+
+.slower-bounce {
+  animation: bounce 2s infinite !important;
+}
+

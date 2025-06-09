@@ -1,31 +1,33 @@
-// https://vitepress.dev/guide/custom-theme
-import { h } from "vue";
-import type { Theme } from "vitepress";
-import DefaultTheme from "vitepress/theme";
-import "./style.css";
+import { h } from 'vue'
+import type { Theme } from 'vitepress'
+import DefaultTheme from 'vitepress/theme'
+import './style.css'
 
-// Importar solo los íconos Lucide necesarios
 import {
   AlertTriangle,
   Shuffle,
   FileX,
   GitBranch,
   Database
-} from "lucide-vue-next";
+} from 'lucide-vue-next'
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faGithub } from '@fortawesome/free-brands-svg-icons'
+import { faBookOpen, faFaceSmileBeam } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faGithub, faBookOpen, faFaceSmileBeam)
 
 export default {
   extends: DefaultTheme,
-  Layout: () => {
-    return h(DefaultTheme.Layout, null, {
-      // Puedes usar slots personalizados aquí si los necesitas
-    });
-  },
+  Layout: () => h(DefaultTheme.Layout),
   enhanceApp({ app }) {
-    // Registrar solo los íconos utilizados como componentes globales
-    app.component("lucide-alert-triangle", AlertTriangle);
-    app.component("lucide-shuffle", Shuffle);
-    app.component("lucide-file-x", FileX);
-    app.component("lucide-git-branch", GitBranch);
-    app.component("lucide-database", Database);
-  },
-} satisfies Theme;
+    app.component('lucide-alert-triangle', AlertTriangle)
+    app.component('lucide-shuffle', Shuffle)
+    app.component('lucide-file-x', FileX)
+    app.component('lucide-git-branch', GitBranch)
+    app.component('lucide-database', Database)
+
+    app.component('FontAwesomeIcon', FontAwesomeIcon)
+  }
+} satisfies Theme

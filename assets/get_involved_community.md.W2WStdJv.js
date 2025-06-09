@@ -1,1 +1,0 @@
-import{_ as e,c as t,o}from"./chunks/framework.BjlC_BXf.js";const p=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"get_involved/community.md","filePath":"get_involved/community.md"}'),n={name:"get_involved/community.md"};function a(c,r,i,m,s,_){return o(),t("div")}const l=e(n,[["render",a]]);export{p as __pageData,l as default};

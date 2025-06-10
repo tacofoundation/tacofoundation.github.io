@@ -17,7 +17,7 @@
           class="card-link flex flex-col items-center text-center !no-underline"
         >
           <FontAwesomeIcon :icon="faGithub" class="!w-12 !h-12 text-blue-300" />
-          <h3 class="text-xl font-semibold mb-2">Contribute</h3>
+          <h3 class="text-xl font-semibold mb-2 ">Contribute</h3>
           <p class="text-sm">Join our open-source community on GitHub</p>
         </a>
 
@@ -64,21 +64,26 @@ import { faBookOpen } from '@fortawesome/free-solid-svg-icons'
   border-radius: 1rem;
   padding: 1.5rem;
   transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+  color: #2d2d2d;
 }
 
 .card-link:hover {
   transform: scale(1.05);
   background-color: #e0f2fe; /* azul claro suave para hover */
   border-color: #90cdf4;
+  color: #2d2d2d;
+
 }
 
 .dark .card-link {
   background-color: #2d2d2d;
   border-color: #444;
+  color: #fff;
 }
 
 .dark .card-link:hover {
   background-color: #334155; /* azul-gris oscuro para hover */
   border-color: #60a5fa;
+    color: #fff;
 }
 </style>

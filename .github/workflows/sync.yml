@@ -1,0 +1,24 @@
+name: Sync specification.md from spec repo
+
+on:
+  repository_dispatch:
+    types: [sync-specification]
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout website repo
+        uses: actions/checkout@v4
+
+      - name: Download README.md from specification repo
+        run: |
+          curl -sL https://raw.githubusercontent.com/tacofoundation/specification/main/README.md -o docs/specification.md
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/specification.md
+          git commit -m "Sync docs/specification.md from tacofoundation/specification" || echo "No changes to commit"
+          git push

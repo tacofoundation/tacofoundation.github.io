@@ -1,24 +1,48 @@
-name: Sync specification.md from spec repo
+name: Deploy VitePress site to Pages
 
 on:
+  push:
+    branches: [main]
+  workflow_dispatch:
   repository_dispatch:
     types: [sync-specification]
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
-  sync:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout website repo
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download README.md from specification repo
+      - name: Wait for GitHub raw content to update
         run: |
-          curl -sL https://raw.githubusercontent.com/tacofoundation/specification/main/README.md -o docs/specification.md
+          echo "Waiting 60 seconds for raw.githubusercontent.com to reflect latest commit..."
+          sleep 120
 
-      - name: Commit and push changes
+      - name: Download latest specification
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/specification.md
-          git commit -m "Sync docs/specification.md from tacofoundation/specification" || echo "No changes to commit"
-          git push
+          curl -s https://raw.githubusercontent.com/tacofoundation/specification/main/README.md -o docs/specification.md
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build site with VitePress
+        run: npm run docs:build
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/.vitepress/dist

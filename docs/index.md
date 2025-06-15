@@ -2,7 +2,7 @@
 layout: home
 
 hero:
-  name: "The TACO Specification"
+  name: '<span id="hero-start">The TACO Specification</span>'
   text: ""
   tagline: >
     A FAIR-compliant, cloud-native specification that defines a formal and scalable format 
@@ -20,6 +20,7 @@ hero:
       text: View Implementation
       link: /api-examples
 ---
+<div id="hero-start"></div>
 
 <script setup>
 import ProblemStatement from './.vitepress/components/ProblemStatement.vue'
@@ -63,7 +64,7 @@ function scrollToContent() {
 </div>
 
 <!-- Ancla destino -->
-<div id="main-content" class="mt-16"></div>
+<div id="main-content" class="mt-9"></div>
 
 <!-- Componentes -->
 <ProblemStatement />

@@ -1,8 +1,8 @@
 <template>
-  <section class="py-20 px-6 taco-section">
-    <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-16">
-        <div class="flex justify-center mb-6">
+  <section id="solution" class="w-full max-w-none px-8 py-16 min-h-screen flex flex-col justify-center">
+    <div class="w-full">
+      <div class="text-center mb-8">
+        <div class="flex justify-center mb-4">
           <CheckCircle class="w-16 h-16 text-green-500" />
         </div>
         <h2 class="!text-4xl md:text-5xl !font-bold mb-6">
@@ -11,7 +11,7 @@
         <div class="inline-block px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium">
           Built on GDAL & Apache Parquet • Multi-language Support • Cloud-Optimized • FAIR-compliant
         </div>
-        <p class="text-xl inline-block max-w-4xl mx-auto leading-relaxed !text-center mb-8">
+        <p class="text-xl inline-block w-full text-balance leading-relaxed !text-center mb-8">
           TACO is a unified specification that brings structure, clarity, and interoperability to AI-ready Earth
           Observation data.
           To achieve this, TACO defines a complete, interoperable specification:
@@ -19,7 +19,7 @@
       </div>
 
       <!-- Tarjetas principales -->
-      <div class="grid md:grid-cols-3 gap-8 mb-12">
+      <div class="grid md:grid-cols-3 gap-8 mb-5">
         <div class="card-taco border-t-4 border-blue-500 dark:border-blue-400">
           <div>
             <div class="flex justify-center mb-6">
@@ -102,16 +102,17 @@
           </p>
         </div>
       </div>
-
-
-
-
     </div>
+    <ScrollToNext targetId="features" label="Scroll Down" />
   </section>
 </template>
 
+
 <script setup>
 import { CheckCircle, Layers, Cloud, Code, Database, Zap } from 'lucide-vue-next';
+
+import ScrollToNext from './ScrollToNext.vue'
+
 </script>
 
 <style scoped>
@@ -171,4 +172,9 @@ import { CheckCircle, Layers, Cloud, Code, Database, Zap } from 'lucide-vue-next
 .dark .card-list {
   color: #e2e8f0;
 }
+
+.card-taco[data-v-01506de7] {
+    padding: 1rem !important;
+}
 </style>
+

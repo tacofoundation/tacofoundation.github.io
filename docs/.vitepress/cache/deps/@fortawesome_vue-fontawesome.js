@@ -10,7 +10,7 @@ import {
   h,
   watch
 } from "./chunk-FA4MWVOB.js";
-import "./chunk-PZ5AY32C.js";
+import "./chunk-HKJ2B2AA.js";
 
 // node_modules/@fortawesome/vue-fontawesome/index.es.js
 function ownKeys(e, r) {

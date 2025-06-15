@@ -87,11 +87,30 @@
   --vp-button-brand-active-border: transparent;
   --vp-button-brand-active-text: var(--vp-c-white);
   --vp-button-brand-active-bg: var(--vp-c-brand-1);
+  
 }
 
 /**
  * Component: Home
  * -------------------------------------------------------------------------- */
+
+
+:root {
+  --vp-layout-max-width: none;
+}
+
+.VPHome.container,
+.VPDoc.container,
+.VPContent .container {
+  max-width: none !important;
+  width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.VPHome {
+  min-height: 100vh !important;
+}
 
 :root {
   --vp-home-hero-name-color: transparent;
@@ -209,3 +228,72 @@
   animation: bounce 2s infinite !important;
 }
 
+
+
+/* Anula el max-width global de VitePress */
+.VPContent.is-home,
+.VPContent,
+.VPDoc,
+.VPHome {
+  max-width: 100% !important;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+@media (min-width: 1600px) {
+  .VPContent.is-home,
+  .VPContent,
+  .VPDoc,
+  .VPHome {
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
+}
+
+
+
+
+
+
+.VPHero .name {
+  font-size: clamp(2rem, 5.7vw, 7rem) !important;
+  line-height: 1.15 !important;
+}
+
+.VPHero .text,
+.VPHero .tagline {
+  font-size: clamp(1rem, 1.4vw, 5rem) !important;
+}
+.VPHome {
+  min-height: 100vh !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.image-container[data-v-72cc4481]{
+  width: 0 !important;
+}
+
+
+/* Aumenta el ancho del bloque de texto */
+@media (min-width: 960px) {
+  .VPHero.has-image .main {
+    max-width: none !important;
+    flex: 0 0 55% !important;
+  }
+
+  .VPHero.has-image .image {
+    flex: 0 0 40% !important;
+    max-width: 35% !important;
+    margin-left: 2rem;
+  }
+}
+
+@media (min-width: 640px) {
+    .name[data-v-72cc4481], .text[data-v-72cc4481] {
+        max-width: none;
+        font-size: clamp(2rem, 6vw, 6rem);
+        line-height: 1.2;
+    }
+}

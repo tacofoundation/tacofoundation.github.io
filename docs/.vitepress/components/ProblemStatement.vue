@@ -1,5 +1,5 @@
 <template>
-  <section class="text-center px-6 py-12 problem-section">
+  <section class="w-full max-w-screen-2xl mx-auto px-8 py-16 min-h-screen flex flex-col justify-center">
     <div class="flex flex-col items-center">
       <lucide-alert-triangle class="icon-warning" />
       <h2 class="heading">The Structural Bottleneck</h2>
@@ -51,6 +51,7 @@
         </p>
       </div>
     </div>
+    <ScrollToNext targetId="solution" label="Scroll Down" />
   </section>
 </template>
 
@@ -114,3 +115,8 @@
   color: #e2e8f0;
 }
 </style>
+
+
+<script setup>
+import ScrollToNext from './ScrollToNext.vue'
+</script>

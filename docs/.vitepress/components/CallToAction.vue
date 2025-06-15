@@ -1,11 +1,14 @@
 <template>
-  <section class="py-20 px-6">
-    <div class="max-w-4xl mx-auto text-center">
-      <h2 class="!text-4xl md:text-5xl font-extrabold mb-6">
+  <section
+    id="callToAction"
+    class="w-full max-w-screen-2xl mx-auto px-8 py-16 min-h-screen flex flex-col justify-center"
+  >
+    <div class="w-full mx-auto text-center">
+      <h2 class="!text-4xl md:!text-5xl font-extrabold mb-6">
         Shape the Future of AI-ready EO Datasets
       </h2>
       <p class="text-xl mb-12 leading-relaxed">
-        Be part of the movement to standardize AI-ready Earth Observation data. 
+        Be part of the movement to standardize AI-ready Earth Observation data.
         Collaborate, learn, and contribute to tools that accelerate global insight and innovation.
       </p>
 
@@ -17,7 +20,7 @@
           class="card-link flex flex-col items-center text-center !no-underline"
         >
           <FontAwesomeIcon :icon="faGithub" class="!w-12 !h-12 text-blue-300" />
-          <h3 class="text-xl font-semibold mb-2 ">Contribute</h3>
+          <h3 class="text-xl font-semibold mb-2">Contribute</h3>
           <p class="text-sm">Join our open-source community on GitHub</p>
         </a>
 
@@ -27,7 +30,7 @@
           target="_blank"
           class="card-link flex flex-col items-center text-center !no-underline"
         >
-          <FontAwesomeIcon :icon="faBookOpen" class="!w-12 !h-12 text-teal-300 " />
+          <FontAwesomeIcon :icon="faBookOpen" class="!w-12 !h-12 text-teal-300" />
           <h3 class="text-xl font-semibold mb-2">Learn</h3>
           <p class="text-sm">Explore our comprehensive documentation</p>
         </a>
@@ -48,6 +51,31 @@
         </a>
       </div>
     </div>
+
+    <!-- Back to Top Button (embebido directamente) -->
+    <div class="flex justify-center mt-8">
+      <div
+        class="inline-flex items-center space-x-2 cursor-pointer slower-bounce group"
+        @click="scrollToTop"
+      >
+        <div
+          class="w-8 h-8 border rounded-full flex items-center justify-center transition-colors group-hover:border-blue-400"
+        >
+          <svg
+            class="w-5 h-5 transition-colors group-hover:text-blue-400 rotate-180"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+        <span class="text-sm transition-colors group-hover:text-blue-400">
+          Back to Top
+        </span>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -55,6 +83,10 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faBookOpen } from '@fortawesome/free-solid-svg-icons'
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 </script>
 
 <style scoped>
@@ -69,10 +101,9 @@ import { faBookOpen } from '@fortawesome/free-solid-svg-icons'
 
 .card-link:hover {
   transform: scale(1.05);
-  background-color: #e0f2fe; /* azul claro suave para hover */
+  background-color: #e0f2fe;
   border-color: #90cdf4;
   color: #2d2d2d;
-
 }
 
 .dark .card-link {
@@ -82,8 +113,8 @@ import { faBookOpen } from '@fortawesome/free-solid-svg-icons'
 }
 
 .dark .card-link:hover {
-  background-color: #334155; /* azul-gris oscuro para hover */
+  background-color: #334155;
   border-color: #60a5fa;
-    color: #fff;
+  color: #fff;
 }
 </style>

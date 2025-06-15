@@ -1,6 +1,4 @@
----
-title: "The TACO specification"
----
+
 
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1z0cxbY2SgSdAuV2134HFFjdApej1fXqm?usp=sharing)

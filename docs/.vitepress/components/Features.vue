@@ -33,13 +33,19 @@ const features = [
     description: "Optimized for training and evaluating large-scale AI models"
   }
 ]
+
+import ScrollToNext from './ScrollToNext.vue'
+
 </script>
 
+
+
+
 <template>
-  <section class="py-10 px-6">
-    <div class="max-w-6xl mx-auto">
+  <section id="features" class="w-full max-w-none px-8 py-16 min-h-screen flex flex-col justify-center">
+    <div class="w-full">
       <div class="text-center mb-8">
-        <h2 class="!text-[3rem] md:text-5xl !font-extrabold !mb-6">
+        <h2 class="!text-[2.5rem] md:!text-5xl lg:!text-[3.5rem] !font-extrabold !mb-6 text-balance">
           Why Choose TACO?
         </h2>
       </div>
@@ -52,18 +58,21 @@ const features = [
         >
           <div class="flex items-center mb-4 gap-4">
             <div class="icon-wrapper">
-              <component :is="feature.icon" class="w-6 h-6 icon-inner" />
+              <component :is="feature.icon" class="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 icon-inner" />
             </div>
-            <h3 class="card-title">{{ feature.title }}</h3>
+            <h3 class="card-title text-balance">{{ feature.title }}</h3>
           </div>
-          <p class="card-text">
+          <p class="card-text text-balance">
             {{ feature.description }}
           </p>
         </div>
       </div>
     </div>
+    <ScrollToNext targetId="callToAction" label="Scroll Down" />
+
   </section>
 </template>
+
 
 <style scoped>
 .card-taco {

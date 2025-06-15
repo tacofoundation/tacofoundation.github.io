@@ -1,9 +1,9 @@
 {
-  "id": "methane",
-  "title": "Methane Detection",
+  "id": "cloudsen12",
+  "title": "CloudSen12",
   "tags": ["methane", "satellite", "GHG"],
   "description": "Satellite-derived methane emission estimates from plumes.",
-  "image": "/images/methane.png",
+  "image": "/image/logo_cloudsen12.webp",
   "snippets": {
     "run": "fused.run('UDF_Methane_Detection')",
     "load": "fused.load('https://github.com/...')"

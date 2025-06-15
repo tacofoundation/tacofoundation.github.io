@@ -15,9 +15,19 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Wait for GitHub raw content to update
+        run: |
+          echo "Waiting 60 seconds for raw.githubusercontent.com to reflect latest commit..."
+          sleep 120
+
+      - name: Download latest specification
+        run: |
+          curl -s https://raw.githubusercontent.com/tacofoundation/specification/main/README.md -o docs/specification.md
 
       - name: Setup Node.js
         uses: actions/setup-node@v4

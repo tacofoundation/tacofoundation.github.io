@@ -19,7 +19,7 @@ export default defineConfig({
       { text: 'Documentation', link: '/documentation' },
       { text: 'Contributing', link: '/contribute' },
       { text: 'Catalog', link: '/catalogue' },
-      { text: 'Publications', link: '/publications' },
+      { text: 'Publications', link: '/publications'    },
 
       
     ],

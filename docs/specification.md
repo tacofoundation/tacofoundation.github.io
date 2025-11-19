@@ -45,7 +45,7 @@ The TACO specification is structured around three distinct but interconnected la
 
 This separation of concerns enables independent evolution of each layer while maintaining compatibility. For example, the physical layer can adopt new compression algorithms without affecting the data model, and multiple API implementations can coexist (Python, R, Julia, Matlab) as long as they provide the same core methods and functionalities, ensuring that users can switch between languages seamlessly.
 
-![TACO Architecture](images/taco_three_layers.png)
+![TACO Architecture](#)
 <caption>
 Figure 1: TACO Three-Layer Architecture. The specification separates logical structure (Data Model), concrete serialization (Physical), and programmatic access (API).
 </caption>

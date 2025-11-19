@@ -75,7 +75,7 @@ Because a SAMPLE can point to another TORTILLA (FOLDER type), hierarchical datas
 
 TACO extends TORTILLA by adding comprehensive dataset-level metadata in a structure called COLLECTION. This metadata provides semantic information about the dataset as a whole, such as identification, provenance, licensing, spatiotemporal coverage, and intended use. A TACO dataset MUST have exactly one root TORTILLA that contains all SAMPLEs.
 
-![TACO Architecture](images/datamodel.png)
+![TACO Architecture](./public/image/datamodel.png)
 
 <caption>
 Figure 2: TACO Core Data Model. A SAMPLE is the minimal unit, classified as FILE (pointing to data files) or FOLDER (pointing to TORTILLAs). TORTILLA is a collection of SAMPLEs with uniform metadata schema. TACO extends TORTILLA by adding dataset-level COLLECTION metadata.
@@ -93,7 +93,7 @@ The Position-Isomorphic Tree (PIT) is a structural constraint that governs how h
 
 This constraint enables O(1) direct access instead of O(n) tree traversal by allowing queries to calculate exact positions using arithmetic rather than scanning metadata (Figure 3).
 
-![PIT Constraint](images/PIT.png)
+![PIT Constraint](./public/image/PIT.png)
 
 <caption>
 Figure 3: Position-Isomorphic Tree (PIT) Constraint. A hierarchical dataset with three levels: spatial tiles (Level 0), temporal sequences (Level 1), and multi-band files (Level 2). PIT ensures all TORTILLAs at the same level contain identical structure: same number of SAMPLEs (n), same identifiers at each position, and same types (FOLDER or FILE). This uniformity enables O(1) direct access.
@@ -145,7 +145,7 @@ TORTILLA provides an efficient mechanism for computing extension metadata over s
 
 TACO-level extensions add dataset-wide metadata using the same namespace convention as SAMPLE-level extensions.
 
-![PIT Constraint](images/metadata_schema.png)
+![PIT Constraint](./public/image/metadata_schema.png)
 
 <caption>
 Figure 4: TACO Metadata Schema Overview. SAMPLE metadata consists of core fields (id, type, path) and extension fields using namespace prefixes. TORTILLA provides efficient computation of extensions over collections of SAMPLEs. TACO metadata (COLLECTION) includes core fields for dataset identification, optional fields for additional context, and extension fields for domain-specific metadata. All levels use the same namespace-based extension mechanism.
@@ -457,7 +457,7 @@ Converts ZIP format to FOLDER format. Uses ExportWriter wrapper providing progre
 
 Controls logging verbosity across all TacoToolbox operations. Level `True` or `"info"` shows standard progress including file counts and operations. Level `"debug"` shows detailed internal operations including offset calculations and metadata processing. Level `False` disables all logging output. Settings apply globally to all subsequent operations until changed.
 
-![PIT Constraint](images/tacotoolbox.png)
+![PIT Constraint](./public/image/tacotoolbox.png)
 
 <caption>
 Overview of TacoToolbox writer API
@@ -604,7 +604,7 @@ Three backends handle format-specific loading strategies sharing common interfac
 
 Controls logging verbosity across all TacoReader operations. Level `True` or `"info"` shows standard progress, including file loading, backend operations, and view creation. Level `"debug"` shows detailed internal operations including DuckDB queries, offset calculations, and memory operations. Level `False` disables all logging output. Settings apply globally to all subsequent operations until changed.
 
-![TacoReader](images/tacoreader.png)
+![TacoReader](./public/image/tacoreader.png)
 
 <caption>
 Overview of TacoReader writer API

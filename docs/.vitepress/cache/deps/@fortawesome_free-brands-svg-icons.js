@@ -1,4 +1,4 @@
-import "./chunk-HKJ2B2AA.js";
+import "./chunk-PZ5AY32C.js";
 
 // node_modules/@fortawesome/free-brands-svg-icons/index.mjs
 var prefix = "fab";

@@ -592,7 +592,9 @@ Three backends handle format-specific loading strategies sharing common interfac
 **FolderBackend** reads directory structure with loose files. Local loading uses lazy disk access without memory loading. Remote loading downloads all metadata to memory. Level 0 constructs paths as `{root}DATA/{id}`, level 1+ uses `{root}DATA/{internal:relative_path}`. FOLDER samples append `/__meta__` for metadata access.
 
 **TacoCatBackend** reads consolidated format from multiple source ZIPs. Parses fixed 128-byte binary header containing format magic, version, max depth, and 7-entry index table. Loads entire file to memory (typically <1GB metadata-only). Constructs VSI paths as `/vsisubfile/{offset}_{size},{base_path}{source_file}` where `source_file` column identifies origin ZIP. Enables querying terabytes of data without opening each ZIP individually.
+ 
 
+ 
 ### **8.6 Logging Control**
 
 **`verbose(level=True|"debug"|False)`**

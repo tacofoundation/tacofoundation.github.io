@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename)
 export default defineConfig({
   title: "The TACO Specification",
   description: "Every EO problem deserves a TACO.",
-
+  cleanUrls: true,
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },

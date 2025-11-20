@@ -1,8 +1,6 @@
-name: Deploy VitePress site to Pages
+name: Sync Specification and Deploy
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
   repository_dispatch:
     types: [sync-specification]
@@ -15,32 +13,34 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
+      
       - name: Wait for GitHub raw content to update
         run: |
-          echo "Waiting 60 seconds for raw.githubusercontent.com to reflect latest commit..."
-          sleep 120
-
+          echo "Waiting 30 seconds for raw.githubusercontent.com to reflect latest commit..."
+          sleep 30
+      
       - name: Download latest specification
         run: |
           curl -s https://raw.githubusercontent.com/tacofoundation/specification/main/README.md -o docs/specification.md
-
+      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-
+      
       - name: Install dependencies
         run: npm ci
-
+      
       - name: Build site with VitePress
         run: npm run docs:build
-
+      
+      - name: Add .nojekyll file
+        run: touch docs/.vitepress/dist/.nojekyll
+      
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:

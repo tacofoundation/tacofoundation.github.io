@@ -2,7 +2,7 @@
 
 ## **1. Version and schema**
 
-This is version 2.0.0 of the TACO specification, released on June 30, 2025. See [Version Compatibility](#3.-Version-Compatibility) for details on compatibility with previous versions.
+This is version 2.0.0 of the TACO specification, released on November 21, 2025. See [Version Compatibility](#9.-Version-Compatibility) for details on compatibility with previous versions.
 
 ## 2. Overview
 
@@ -46,7 +46,6 @@ The TACO specification is structured around three distinct but interconnected la
 This separation of concerns enables independent evolution of each layer while maintaining compatibility. For example, the physical layer can adopt new compression algorithms without affecting the data model, and multiple API implementations can coexist (Python, R, Julia, Matlab) as long as they provide the same core methods and functionalities, ensuring that users can switch between languages seamlessly.
 
 ![TACO Architecture](/image/taco_three_layers.png)
-
 *Figure 1: TACO Three-Layer Architecture. The specification separates logical structure (Data Model), concrete serialization (Physical), and programmatic access (API).*
 
 
@@ -64,16 +63,15 @@ A SAMPLE represents the minimal self-contained and smallest indivisible unit. Ea
 
 **FOLDER**: The SAMPLE points to a TORTILLA container, enabling hierarchical structures.
 
-
 ### 5.2 TORTILLA
 
-A TORTILLA is a collection of SAMPLEs. All SAMPLEs within a TORTILLA MUST have the same metadata schema with consistent types, ensuring that the combined metadata can be represented as a tabular dataframe. 
+A TORTILLA is a collection of SAMPLEs. All SAMPLEs within a TORTILLA **MUST** have the same metadata schema with consistent types, ensuring that the combined metadata can be represented as a tabular dataframe. 
 
-Because a SAMPLE can point to another TORTILLA (FOLDER type), hierarchical dataset structures can be created through recursive nesting. For example, a root TORTILLA contains SAMPLEs of spatial tiles (FOLDER type), where each tile is itself a TORTILLA containing temporal sequences (FOLDER type), and each sequence is a TORTILLA containing multi-band images (FILE type). This hierarchical organization enables efficient representation of complex geospatial datasets with multiple levels of grouping while maintaining a simple and consistent data model.
+Because a SAMPLE can point to another TORTILLA (FOLDER type), hierarchical dataset structures can be created through recursive nesting. For example, a parent TORTILLA contains SAMPLEs of spatial tiles (FOLDER type), where each spatial tile is itself a TORTILLA containing temporal sequences (FOLDER type), and each temporal sequence is a TORTILLA containing multi-band images (FILE type). This hierarchical organization enables efficient representation of complex geospatial datasets with multiple levels of grouping while maintaining a simple and consistent data model.
 
 ### 5.3 TACO
 
-TACO extends TORTILLA by adding comprehensive dataset-level metadata in a structure called COLLECTION. This metadata provides semantic information about the dataset as a whole, such as identification, provenance, licensing, spatiotemporal coverage, and intended use. A TACO dataset MUST have exactly one root TORTILLA that contains all SAMPLEs.
+TACO extends TORTILLA by adding comprehensive dataset-level metadata in a structure called COLLECTION. This metadata provides semantic information about the dataset as a whole, such as identification, provenance, licensing, spatiotemporal coverage, and intended use. A TACO dataset **MUST** have exactly one root TORTILLA that contains all SAMPLEs.
 
 ![TACO Architecture](/image/datamodel.png)
 
@@ -82,24 +80,30 @@ TACO extends TORTILLA by adding comprehensive dataset-level metadata in a struct
 
 ### 5.4 Hierarchical Organization
 
-PIT is a structural constraint that governs how hierarchical TACO datasets are organized. For a dataset to be PIT-compliant, the following rules MUST be enforced:
+The Position-Invariant Tree (PIT) is a structural constraint that enables efficient navigation and querying of hierarchical TACO datasets. PIT enforces a regular tree structure where the position of any node uniquely determines its path from the root, eliminating the need for explicit parent-child relationship tracking.
 
-**Structural Isomorphism**: All root SAMPLEs (level 0) START AT THE SAME NODE (TACO) AND MUST be structurally isomorphic. Two samples are isomorphic when:
-- They contain the same number of children.
-- Children at the same position have identical identifiers (id field)
-- Children at the same position have the same type (FILE or FOLDER)
+For a dataset to be PIT-compliant, the following rules MUST be enforced:
 
-**Schema Uniformity**: All SAMPLEs at the same hierarchy level MUST have identical metadata schemas, including all core and extension fields.
+**PIT-1: Structural Isomorphism at Level 0**  
 
-This constraint enables O(1) direct access instead of O(n) tree traversal.
+All SAMPLEs at the root level (level 0) MUST be structurally isomorphic. Two SAMPLEs are considered isomorphic when they satisfy ALL of the following conditions:
+
+- They MUST contain the same number of children
+- Children at the same position MUST have identical identifiers (id field)
+- Children at the same position MUST have the same type (FILE or FOLDER)
+
+**PIT-2: Schema Uniformity Across Levels**  
+
+All SAMPLEs at the same hierarchy level MUST share an identical metadata schema, including:
+
+- All core metadata fields with matching data types
+- All extension fields with matching data types
+- Identical field ordering (optional but recommended)
 
 ![PIT Constraint](/image/PIT.png)
 *Figure 3: Valid PIT (left) has uniform structure: all FOLDERs contain 2 FILEs. Invalid PIT (right) has different child counts: FOLDER_0 has 2 FILEs, FOLDER_1 has 3 FILEs.*
 
 **Padding for irregular structures**: When datasets have missing observations, placeholder SAMPLEs with identifiers `__TACOPAD__N` are inserted to maintain PIT compliance.
-
-**Example**: Consider CloudSEN12 with 10,000 FOLDER samples, each with three files: s2_l1c.tif, s2_l2a.tif, and target.tif. Under PIT, accessing data follows a standardized pattern: `{s2_id}/s2_l1c.tif` for input and `{s2_id}/target.tif` for labels.
-
 
 ## 5.5 Metadata Schema
 
@@ -115,7 +119,7 @@ The TACO data model defines metadata at two levels: SAMPLE-level metadata descri
 
 **Extension fields:**
 
-SAMPLEs can be extended with domain-specific metadata through the extension mechanism. Extensions add additional fields using namespace prefixes (e.g., `stac:*`, `rai:*`, `stats:*`). All SAMPLEs within a TORTILLA MUST have identical metadata schemas, including all extension fields.
+SAMPLEs can be extended with domain-specific metadata through the extension mechanism. Extensions add additional fields using namespace prefixes (e.g., `stac:*` or `stats:*`). All SAMPLEs within a TORTILLA MUST have identical metadata schemas, including all extension fields.
 
 TORTILLA provides an efficient mechanism for computing extension metadata over sets of SAMPLEs. When metadata computation benefits from accessing the entire dataset (e.g., statistical aggregations, spatial indexing, batch processing), TORTILLA extensions compute fields across all contained SAMPLEs simultaneously rather than individually.
 
@@ -124,7 +128,7 @@ TORTILLA provides an efficient mechanism for computing extension metadata over s
 **Core fields (REQUIRED):**
 
 - `id` (String): Unique persistent identifier for the dataset. MUST be lowercase alphanumeric with underscores and hyphens allowed.
-- `taco_version` (String): TACO specification version (e.g., "0.5.0").
+- `taco_version` (String): TACO specification version (e.g., "2.0.0").
 - `dataset_version` (String): Version of the dataset itself.
 - `description` (String): Human-readable description of the dataset.
 - `licenses` (List[String]): Dataset license(s). SPDX identifiers are RECOMMENDED.
@@ -136,15 +140,13 @@ TORTILLA provides an efficient mechanism for computing extension metadata over s
 - `title` (String): Short title for the dataset (max 250 characters).
 - `curators` (List[Object]): Persons responsible for converting the dataset to TACO format. Same structure as `providers`.
 - `keywords` (List[String]): Descriptive keywords for searchability.
-- `extent` (Object): Spatial and temporal coverage. Contains `spatial` (bounding box `[min_lon, min_lat, max_lon, max_lat]` in WGS84) and `temporal` (ISO 8601 datetime strings `[start, end]`).
+- `extent` (Object): Spatial and temporal coverage. Contains `spatial` (bounding box `[min_lon, min_lat, max_lon, max_lat]` in WGS84) and `temporal` (ISO 8601 datetime strings `[start, end]`). This field can be auto-calculated from SAMPLE-level metadata if user defines the STAC extension.
 
 **Extension fields:**
 
 TACO-level extensions add dataset-wide metadata using the same namespace convention as SAMPLE-level extensions.
 
 ![PIT Constraint](/image/metadata_schema.png)
-
-
 *Figure 4: TACO Metadata Schema Overview. SAMPLE metadata consists of core fields (id, type, path) and extension fields using namespace prefixes. TORTILLA provides efficient computation of extensions over collections of SAMPLEs. TACO metadata (COLLECTION) includes core fields for dataset identification, optional fields for additional context, and extension fields for domain-specific metadata. All levels use the same namespace-based extension mechanism.*
 
 
@@ -173,33 +175,7 @@ dataset/
 └── COLLECTION.json
 ```
 
-**Example 2 - Two-level hierarchy (spatial tiles → temporal images):**
-
-```
-dataset/
-├── DATA/
-│   ├── tile_001/
-│   │   ├── __meta__
-│   │   ├── 2023-01-01.tif
-│   │   ├── 2023-01-02.tif
-│   │   └── 2023-01-03.tif
-│   ├── tile_002/
-│   │   ├── __meta__
-│   │   ├── 2023-01-01.tif
-│   │   ├── 2023-01-02.tif
-│   │   └── 2023-01-03.tif
-│   └── tile_003/
-│       ├── __meta__
-│       ├── 2023-01-01.tif
-│       ├── 2023-01-02.tif
-│       └── 2023-01-03.tif
-├── METADATA/
-│   ├── level0.parquet
-│   └── level1.parquet
-└── COLLECTION.json
-```
-
-**Example 3 - Three-level hierarchy (scenes → components → bands):**
+**Example 2 - Three-level hierarchy (scenes -> components -> files):**
 
 ```
 dataset/
@@ -230,17 +206,19 @@ dataset/
 ```
 dataset/
 ├── DATA/
-│   ├── tile_001/          ← FOLDER
+│   ├── tile_001/          <- FOLDER
 │   │   └── __meta__
-│   ├── tile_002/          ← FOLDER
+│   │   └── file_a
+│   ├── tile_002/          <- FOLDER
 │   │   └── __meta__
-│   └── image_003.tif      ← FILE (BREAKS PIT!)
+│   │   └── file_a
+│   └── tile_003      <- FILE (BREAKS PIT!)
 ├── METADATA/
 │   └── level0.parquet
 └── COLLECTION.json
 ```
 
-This violates PIT because level 0 contains both FOLDER samples (tile_001, tile_002) and FILE samples (image_003.tif). All samples at the same level MUST have the same type.
+This violates PIT because level 0 contains both FOLDER samples (tile_001, tile_002) and FILE sample (tile_003). All samples at the same level **MUST** have the same type, this structure is invalid.
 
 ### 6.2 Dual Metadata System
 
@@ -248,21 +226,18 @@ TACO implements a dual metadata strategy to optimize for different access patter
 
 **Consolidated Metadata (METADATA/levelX.parquet)**
 
-Purpose: Enable efficient SQL queries across the entire dataset without traversing the directory hierarchy.
+*Consolidated metadata* enables efficient SQL queries across the entire dataset without traversing the directory hierarchy. Each file **MUST** contain all SAMPLE metadata at its corresponding hierarchy level, including core fields (id, type, path), extension fields, and the automatically generated `internal:parent_id` field that links each SAMPLE to its parent's index in the previous level.
 
-Content: Contains all SAMPLE metadata at each hierarchy level, including core fields (id, type, path), extension fields, and the automatically generated `internal:parent_id` field that links each SAMPLE to its parent's index in the previous level.
-
-Access pattern: Loaded once at dataset initialization for query planning and execution. Enables operations like filtering by spatiotemporal extent, aggregating statistics, or selecting specific SAMPLEs without filesystem traversal.
+*Consolidated metadata* is lazy-loaded at dataset initialization for query planning and execution. This organization enables operations like filtering by spatiotemporal extent, aggregating statistics, or selecting specific SAMPLEs based on arbitrary predicates.
 
 **Local Metadata (DATA/folder/__meta__.parquet)**
 
-Purpose: Enable fast navigation within a specific folder without loading the entire dataset's metadata.
+*Local metadata* enables fast navigation within a specific folder without loading the entire dataset's metadata. Each `__meta__` parquet file **MUST** contain metadata only for the direct children of that specific folder, representing a complete metadata snapshot for one TORTILLA container. In practical terms, a TORTILLA always maps to a directory that MUST contain a `__meta__` file with its children's metadata.
 
-Content: Contains metadata only for the direct children of a specific folder. Each `__meta__` parquet file represents a complete metadata snapshot for one TORTILLA container.
-
-Access pattern: Read on-demand when navigating into a specific folder or querying a subset of the hierarchy. Enables efficient local operations without the overhead of loading global metadata.
+*Local metadata* is read on-demand when navigating into a specific folder or querying a subset of the hierarchy. This organization enables efficient local operations without the overhead of loading global metadata, supporting workflows that process individual folders or subtrees independently.
 
 The dual system allows TACO readers to choose the optimal metadata source based on the query: consolidated metadata for global operations, local metadata for hierarchical navigation.
+
 
 ### 6.3 ZIP Format
 
@@ -270,7 +245,7 @@ TACO implements a cloud-optimized version of the ZIP format. The standard ZIP fo
 
 All files in TACO ZIP archives use STORE mode (compression method = 0), meaning no compression is applied. This design choice enables efficient byte-range access in cloud storage scenarios, GDAL Virtual File System compatibility, and parallel random access patterns without decompression overhead.
 
-When a ZIP container is created, two additional metadata columns are generated: `internal:offset` indicating the byte offset of each SAMPLE within the ZIP file, and `internal:size` indicating the length in bytes. These columns enable direct access to individual SAMPLEs without decompressing the entire archive. The ZIP format is immutable once created and is suitable for distribution, archival, and cloud storage deployments.
+When a ZIP container is created, two additional metadata columns MUST be generated: `internal:offset` indicating the byte offset of each SAMPLE within the ZIP file, and `internal:size` indicating the length in bytes. These columns enable direct access to individual SAMPLEs without decompressing the entire archive. The ZIP format is immutable, updating metadata requires recreating the entire ZIP file.
 
 ### 6.4 FOLDER Format
 
@@ -281,7 +256,6 @@ FOLDER format supports efficient metadata updates through Content-Defined Chunki
 When metadata is updated, only chunks containing modified data need to be transferred to storage. The storage backend reconstructs files by assembling the appropriate chunks based on their hash references. This approach reduces transfer size proportionally to the magnitude of changes rather than total file size, providing significant efficiency improvements for incremental updates to large Parquet metadata files.
 
 Server support for content-defined chunking and chunk-level deduplication is required to achieve these performance characteristics.
-
 
 ### 6.5 TacoCat Format
 
@@ -592,8 +566,6 @@ Three backends handle format-specific loading strategies sharing common interfac
 
 **TacoCatBackend** reads consolidated format from multiple source ZIPs. Parses fixed 128-byte binary header containing format magic, version, max depth, and 7-entry index table. Loads entire file to memory (typically <1GB metadata-only). Constructs VSI paths as `/vsisubfile/{offset}_{size},{base_path}{source_file}` where `source_file` column identifies origin ZIP. Enables querying terabytes of data without opening each ZIP individually.
  
-
- 
 ### **8.6 Logging Control**
 
 **`verbose(level=True|"debug"|False)`**
@@ -602,3 +574,20 @@ Controls logging verbosity across all TacoReader operations. Level `True` or `"i
 
 ![TacoReader](/image/tacoreader.png)
 *Overview of TacoReader writer API*
+
+
+## **9. Version Compatibility**
+
+TACO v2.0.0 is **NOT backward compatible** with v1.x datasets. Existing v1.x datasets must be migrated or recreated to work with v2.0.0 tools. Key breaking changes include:
+
+- **PIT Enforcement**: v2.0.0 requires strict PIT compliance at all hierarchy levels. v1.x allowed heterogeneous structures where siblings could differ in child count or organization.
+
+- **Metadata Schema**: Core metadata fields have been renamed, removed, or changed types. Field names now use namespace prefixes (e.g., `stac:*`, `istac:*`) for clarity and extensibility.
+
+- **Extension Mechanism**: v2.0.0 introduces a unified extension system with `extend_with()` interface applicable to Samples, Tortillas, and Tacos. v1.x used separate, incompatible extension approaches for each level.
+
+- **Container Formats**: v2.0.0 uses standard ZIP archives and directory structures (FOLDER) accessible with generic tools. v1.x relied on a custom BLOB format requiring specialized readers.
+
+- **Dual Metadata System**: v2.0.0 implements both consolidated metadata (`METADATA/levelX.parquet`) for SQL queries and local metadata (`__meta__` files) for navigation. v1.x supported only local metadata, requiring full traversal for dataset-wide operations.
+
+- **API Redesign**: TacoToolbox and TacoReader have been completely redesigned with breaking changes to function signatures and class interfaces.

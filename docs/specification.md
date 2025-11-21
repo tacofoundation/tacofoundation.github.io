@@ -24,7 +24,7 @@ The TACO specification is guided by the following design principles:
 
 2. Cloud-optimized: The format supports partial reads and efficient byte-range access, enabling streaming workflows without downloading entire datasets. Metadata is organized to minimize HTTP requests in cloud storage scenarios.
 
-3. Hierarchical by design: TACO natively supports nested dataset structures through the Position-Isomorphic Tree (PIT) constraint, enabling efficient SQL queries over multi-level hierarchies.
+3. Hierarchical by design: TACO natively supports nested dataset structures through the Position-Invariant Tree (PIT) constraint, enabling efficient SQL queries over multi-level hierarchies.
 
 4. FAIR-compliant: TACO implements the FAIR principles (Findability, Accessibility, Interoperability, Reusability) through standardized metadata, persistent identifiers, clear licensing, and format interoperability.
 
@@ -80,27 +80,26 @@ TACO extends TORTILLA by adding comprehensive dataset-level metadata in a struct
 *Figure 2: TACO Core Data Model. A SAMPLE is the minimal unit, classified as FILE (pointing to data files) or FOLDER (pointing to TORTILLAs). TORTILLA is a collection of SAMPLEs with uniform metadata schema. TACO extends TORTILLA by adding dataset-level COLLECTION metadata.*
 
 
-### 5.4 Hierarchical Organization (PIT)
+### 5.4 Hierarchical Organization
 
-The Position-Isomorphic Tree (PIT) is a structural constraint that governs how hierarchical TACO datasets are organized. For a dataset to be PIT-compliant, the following rules MUST be enforced:
+PIT is a structural constraint that governs how hierarchical TACO datasets are organized. For a dataset to be PIT-compliant, the following rules MUST be enforced:
 
-**Uniform SAMPLE count**: All TORTILLAs at the same hierarchy level MUST contain the same number of SAMPLEs.
+**Structural Isomorphism**: All root SAMPLEs (level 0) START AT THE SAME NODE (TACO) AND MUST be structurally isomorphic. Two samples are isomorphic when:
+- They contain the same number of children.
+- Children at the same position have identical identifiers (id field)
+- Children at the same position have the same type (FILE or FOLDER)
 
-**Identical SAMPLE identifiers**: SAMPLEs at the same position across all TORTILLAs in the same level MUST have identical identifiers.
+**Schema Uniformity**: All SAMPLEs at the same hierarchy level MUST have identical metadata schemas, including all core and extension fields.
 
-**Consistent SAMPLE types**: SAMPLEs at the same position across all TORTILLAs in the same level MUST have the same type (FILE or FOLDER).
-
-This constraint enables O(1) direct access instead of O(n) tree traversal by allowing queries to calculate exact positions using arithmetic rather than scanning metadata (Figure 3).
+This constraint enables O(1) direct access instead of O(n) tree traversal.
 
 ![PIT Constraint](/image/PIT.png)
+*Figure 3: Valid PIT (left) has uniform structure: all FOLDERs contain 2 FILEs. Invalid PIT (right) has different child counts: FOLDER_0 has 2 FILEs, FOLDER_1 has 3 FILEs.*
 
+**Padding for irregular structures**: When datasets have missing observations, placeholder SAMPLEs with identifiers `__TACOPAD__N` are inserted to maintain PIT compliance.
 
-*Figure 3: Position-Isomorphic Tree (PIT) Constraint. A hierarchical dataset with three levels: spatial tiles (Level 0), temporal sequences (Level 1), and multi-band files (Level 2). PIT ensures all TORTILLAs at the same level contain identical structure: same number of SAMPLEs (n), same identifiers at each position, and same types (FOLDER or FILE). This uniformity enables O(1) direct access.*
+**Example**: Consider CloudSEN12 with 10,000 FOLDER samples, each with three files: s2_l1c.tif, s2_l2a.tif, and target.tif. Under PIT, accessing data follows a standardized pattern: `{s2_id}/s2_l1c.tif` for input and `{s2_id}/target.tif` for labels.
 
-**Padding for irregular structures**: When datasets have missing observations (e.g., due to cloud cover or sensor failures), placeholder SAMPLEs with identifiers `__TACOPAD__N` are inserted to maintain PIT compliance while preserving structural consistency.
-
-**Example**: Consider the CloudSEN12 dataset with 10,000 FOLDER samples, each with tree 
-files: Sentinel-2 L1C (s2_l1c.tif), Sentinel-2 L2A (s2_l2a.tif), and labels (target.tif). Under PIT, accessing data follows a standardized access pattern: `{s2_id}/s2_l1c.tif` for input imagery and `{s2_id}/target.tif` for labels, where `s2_id` is the SAMPLE identifier. File names or type within each folder SAMPLE cannot be modified, as this would break the PIT schema uniformity.
 
 ## 5.5 Metadata Schema
 
@@ -323,7 +322,7 @@ Sample(
 
 **`datamodel.Tortilla`**
 
-Collection of Samples with uniform metadata schema. Validates Position-Isomorphic Tree constraints.
+Collection of Samples with uniform metadata schema. Validates PIT constraints.
 
 ```python
 Tortilla(
@@ -491,7 +490,7 @@ TacoDataset provides STAC-like metadata container with DuckDB connection enablin
 - `id`, `version`, `description`: Dataset identification
 - `tasks`, `extent`, `providers`, `licenses`: Dataset characteristics  
 - `title`, `curators`, `keywords`: Optional descriptive metadata
-- `pit_schema`: Position-Isomorphic Tree structural schema
+- `pit_schema`: PIT structural schema
 - `field_schema`: Column schemas by hierarchy level
 - `collection`: Complete COLLECTION.json content
 

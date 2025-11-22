@@ -527,9 +527,9 @@ result = ds2.data  # Executes combined query
 
 **STAC-Style Filtering**
 
-`filter_bbox(minx, miny, maxx, maxy, geometry_col="auto", level=0)` filters by spatial bounding box using spatial query capabilities. When `geometry_col="auto"`, searches columns in priority order: `istac:geometry`, `stac:centroid`, `istac:centroid`. When `level > 0`, filters level0 samples based on children's geometry using cascading JOINs.
+- `filter_bbox(minx, miny, maxx, maxy, geometry_col="auto", level=0)` filters by spatial bounding box using spatial query capabilities. When `geometry_col="auto"`, searches columns in priority order: `istac:geometry`, `stac:centroid`, `istac:centroid`. When `level > 0`, filters level0 samples based on children's geometry using cascading JOINs.
 
-`filter_datetime(datetime_range, time_col="auto", level=0)` filters by temporal range using native Parquet TIMESTAMP columns. Accepts string range `"2023-01-01/2023-12-31"`, single datetime object, or tuple of datetime objects. When `time_col="auto"`, searches columns in priority order: `istac:time_start`, `stac:time_start`. Always uses `time_start`. When `level > 0`, filters level0 samples based on children's timestamps.
+- `filter_datetime(datetime_range, time_col="auto", level=0)` filters by temporal range using native Parquet TIMESTAMP columns. Accepts string range `"2023-01-01/2023-12-31"`, single datetime object, or tuple of datetime objects. When `time_col="auto"`, searches columns in priority order: `istac:time_start`, `stac:time_start`. Always uses `time_start`. When `level > 0`, filters level0 samples based on children's timestamps.
 
 **Cascading Joins**: Multi-level filtering uses INNER JOINs: `level0 -> level1 -> level2 -> target_level` using `internal:parent_id` foreign keys. Returns DISTINCT level0 samples whose descendants match filter criteria. JOIN strategy varies by format: ZIP/FOLDER uses parent_id referencing parent's ID string, TACOCAT uses parent_id as local index plus `internal:source_file` for disambiguation across multiple source ZIPs.
 
@@ -581,11 +581,11 @@ Concatenates multiple TacoDataset instances into a single dataset with a lazy qu
 
 **Column Modes**:
 
-`intersection` mode (default, safest) keeps only columns present in ALL datasets. Drops columns existing only in some datasets with a warning showing which columns were dropped and from which datasets. Suitable when datasets have slight schema variations and only common columns are needed.
+- `intersection` mode (default, safest) keeps only columns present in ALL datasets. Drops columns existing only in some datasets with a warning showing which columns were dropped and from which datasets. Suitable when datasets have slight schema variations and only common columns are needed.
 
-`fill_missing` mode keeps all columns from all datasets, filling missing columns with NULL. Warns showing which columns are being filled and in which datasets. Suitable when all columns are needed, even if some datasets lack them.
+- `fill_missing` mode keeps all columns from all datasets, filling missing columns with NULL. Warns showing which columns are being filled and in which datasets. Suitable when all columns are needed, even if some datasets lack them.
 
-`strict` mode fails if columns differ between datasets. Raises ValueError with a detailed breakdown showing exact schema per dataset, columns only in some datasets, and columns common to all. Suitable for production pipelines requiring schema homogeneity.
+- `strict` mode fails if columns differ between datasets. Raises ValueError with a detailed breakdown showing exact schema per dataset, columns only in some datasets, and columns common to all. Suitable for production pipelines requiring schema homogeneity.
 
 **View Construction**: Creates query views combining all datasets with `internal:source_file` column tracking origin dataset. Filters padding samples (`__TACOPAD__N`) from user-facing views. Constructs `internal:gdal_vsi` paths per format for data access.
 
@@ -593,11 +593,11 @@ Concatenates multiple TacoDataset instances into a single dataset with a lazy qu
 
 Three backends handle format-specific loading strategies, sharing a common interface through an abstract base class.
 
-**ZipBackend** reads `.tacozip` format using TACO_HEADER at file start for direct offset-based access without full ZIP extraction. Constructs VSI paths as `/vsisubfile/{offset}_{size},{zip_path}`, enabling GDAL byte-range access.
+- **ZipBackend** reads `.tacozip` format using TACO_HEADER at file start for direct offset-based access without full ZIP extraction. Constructs VSI paths as `/vsisubfile/{offset}_{size},{zip_path}`, enabling GDAL byte-range access.
 
-**FolderBackend** reads the directory structure with loose files. Level 0 constructs paths as `{root}DATA/{id}`, level 1+ uses `{root}DATA/{internal:relative_path}`.
+- **FolderBackend** reads the directory structure with loose files. Level 0 constructs paths as `{root}DATA/{id}`, level 1+ uses `{root}DATA/{internal:relative_path}`.
 
-**TacoCatBackend** reads consolidated format from multiple source ZIPs. Parses a fixed 128-byte binary header containing format magic, version, max depth, and a 7-entry index table. Loads entire file to memory (typically <1GB metadata-only). Constructs VSI paths as `/vsisubfile/{offset}_{size},{base_path}{source_file}` where `source_file` column identifies origin ZIP.
+- **TacoCatBackend** reads consolidated format from multiple source ZIPs. Parses a fixed 128-byte binary header containing format magic, version, max depth, and a 7-entry index table. Loads entire file to memory (typically <1GB metadata-only). Constructs VSI paths as `/vsisubfile/{offset}_{size},{base_path}{source_file}` where `source_file` column identifies origin ZIP.
  
 #### 7.2.6. Logging Control
 
@@ -628,33 +628,33 @@ TACO v2.0.0 is **NOT backward compatible** with v1.x datasets. Existing v1.x dat
 
 ## Annex A: Glossary
 
-**Container Format**: Physical storage structure for TACO datasets. Two formats supported: ZIP (compressed archive) and FOLDER (directory structure).
+- **Container Format**: Physical storage structure for TACO datasets. Two formats supported: ZIP (compressed archive) and FOLDER (directory structure).
 
-**Consolidated Metadata**: Parquet files containing all sample metadata for a hierarchy level. Stored as `METADATA/level0.parquet`, `METADATA/level1.parquet`, etc. Enables efficient SQL queries without traversing individual samples.
+- **Consolidated Metadata**: Parquet files containing all sample metadata for a hierarchy level. Stored as `METADATA/level0.parquet`, `METADATA/level1.parquet`, etc. Enables efficient SQL queries without traversing individual samples.
 
-**Extension**: Modular mechanism for adding domain-specific metadata to SAMPLEs, or TACOs. Extensions define schema and computation logic, enabling standardized metadata enrichment.
+- **Extension**: Modular mechanism for adding domain-specific metadata to SAMPLEs, or TACOs. Extensions define schema and computation logic, enabling standardized metadata enrichment.
 
-**Hierarchical Navigation**: Traversal through nested FOLDER samples using `read()` method. Each level represents a containment relationship (e.g., country -> region -> scene).
+- **Hierarchical Navigation**: Traversal through nested FOLDER samples using `read()` method. Each level represents a containment relationship (e.g., country -> region -> scene).
 
-**Local Metadata**: Sample-specific metadata stored in `__meta__` files within FOLDER samples. Contains children's metadata for direct filesystem access without consolidated files.
+- **Local Metadata**: Sample-specific metadata stored in `__meta__` files within FOLDER samples. Contains children's metadata for direct filesystem access without consolidated files.
 
-**PIT (Position-Invariant Tree)**: Structural constraint ensuring all root samples at the same hierarchy level share identical structure.
+- **PIT (Position-Invariant Tree)**: Structural constraint ensuring all root samples at the same hierarchy level share identical structure.
 
-**Sample**: Atomic unit in TACO datasets. Can be a FILE (leaf node with data) or a FOLDER (intermediate node with children). Each sample has a unique ID within the parent scope.
+- **Sample**: Atomic unit in TACO datasets. Can be a FILE (leaf node with data) or a FOLDER (intermediate node with children). Each sample has a unique ID within the parent scope.
 
-**STAC (SpatioTemporal Asset Catalog)**: Open standard for geospatial metadata. TACO provides STAC-compatible metadata structure while adding hierarchical organization and validation.
+- **STAC (SpatioTemporal Asset Catalog)**: Open standard for geospatial metadata. TACO provides STAC-compatible metadata structure while adding hierarchical organization and validation.
 
-**TACO**: Complete dataset with collection-level metadata (licenses, providers, extent). Contains one TORTILLA with all samples plus descriptive metadata.
+- **TACO**: Complete dataset with collection-level metadata (licenses, providers, extent). Contains one TORTILLA with all samples plus descriptive metadata.
 
-**TACOCAT**: Consolidated format merging multiple TACO ZIP datasets into a single file with a 128-byte binary header and index table. Optimized for querying large collections without opening individual ZIPs.
+- **TACOCAT**: Consolidated format merging multiple TACO ZIP datasets into a single file with a 128-byte binary header and index table. Optimized for querying large collections without opening individual ZIPs.
 
-**TORTILLA**: Collection of samples with uniform metadata schema. Building block for TACO datasets.
+- **TORTILLA**: Collection of samples with uniform metadata schema. Building block for TACO datasets.
 
-**VSI Path**: GDAL Virtual File System path format. Enables direct raster access from compressed archives using `/vsisubfile/{offset}_{size},{path}` syntax for byte-range reads.
+- **VSI Path**: GDAL Virtual File System path format. Enables direct raster access from compressed archives using `/vsisubfile/{offset}_{size},{path}` syntax for byte-range reads.
 
 ---
 
-## Annex B: HISTORY
+## Annex B: History
 
 TACO was born in Valencia, Spain, at the Image and Signal Processing ([ISP](https://isp.uv.es/)) group of the Universitat de València. Every Friday, we met at [TKOTACO](https://tkotacos.com/) - a one-euro taco restaurant - to talk about series, anime, memes, data, and sometimes new deep learning papers. The regular crew was Julio Contreras, Oscar Pellicer, Simon Donike, Chen Ma ([HIT](https://en.hit.edu.cn/)), and me (@csaybar). When David Montero ([University of Leipzig](https://rsc4earth.de/)) visited, he always joined us.
 

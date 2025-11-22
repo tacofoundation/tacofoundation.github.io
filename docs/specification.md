@@ -662,7 +662,7 @@ TACO v2.0.0 is **NOT backward compatible** with v1.x datasets. Existing v1.x dat
 
 ---
 
-## **Annex B: HISTORY **
+## **Annex B: HISTORY**
 
 TACO was born in Valencia, Spain, at the Image and Signal Processing ([ISP](https://isp.uv.es/)) group of the Universitat de València. Every Friday, we met at [TIKITACO](https://tkotacos.com/) - a one-euro taco restaurant - to talk about series, anime, memes, data, and sometimes new deep learning papers. The regular crew was Julio Contreras, Oscar Pellicer, and me (@csaybar). When David Montero ([University of Leipzig](https://rsc4earth.de/)) visited the city, he always joined us too.
 

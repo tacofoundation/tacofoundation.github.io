@@ -1,6 +1,6 @@
 # The TACO specification 
 
-## **1. Version and schema**
+## 1. Version and schema
 
 This is version 2.0.0 of the TACO specification, released on November 21, 2025. See [Version Compatibility](#9.-Version-Compatibility) for details on compatibility with previous versions. The specification follows semantic versioning (MAJOR.MINOR.PATCH). Within the same major version, all updates **MUST** maintain backward compatibility.
 
@@ -49,9 +49,9 @@ This separation of concerns enables independent evolution of each layer while ma
 *Figure 1: TACO Three-Layer Architecture. The specification separates logical structure (Data Model), concrete serialization (Physical), and programmatic access (API).*
 
 
-# 5. PART I: DATA MODEL LAYER (Logical Structure)
+## 5. DATA MODEL LAYER (Logical Structure)
 
-## 5.1. Core Concepts
+### 5.1. Core Concepts
 
 The TACO data model defines three fundamental abstractions that structure how datasets are organized: SAMPLE, TORTILLA, and TACO. These concepts form a nested hierarchy where each level serves a distinct purpose in representing AI-ready geospatial datasets.
 
@@ -63,13 +63,13 @@ A SAMPLE represents the minimal self-contained and smallest indivisible unit. Ea
 
 **FOLDER**: The SAMPLE points to a TORTILLA container, enabling hierarchical structures.
 
-### 5.2 TORTILLA
+### 5.3. TORTILLA
 
 A TORTILLA is a collection of SAMPLEs. All SAMPLEs within a TORTILLA **MUST** have the same metadata schema with consistent types, ensuring that the combined metadata can be represented as a tabular dataframe. 
 
 Because a SAMPLE can point to another TORTILLA (FOLDER type), hierarchical dataset structures can be created through recursive nesting. For example, a parent TORTILLA contains SAMPLEs of spatial tiles (FOLDER type), where each spatial tile is itself a TORTILLA containing temporal sequences (FOLDER type), and each temporal sequence is a TORTILLA containing multi-band images (FILE type). This hierarchical organization enables efficient representation of complex geospatial datasets with multiple levels of grouping while maintaining a simple and consistent data model.
 
-### 5.3 TACO
+### 5.4. TACO
 
 TACO extends TORTILLA by adding comprehensive dataset-level metadata in a structure called COLLECTION. This metadata provides semantic information about the dataset as a whole, such as identification, provenance, licensing, spatiotemporal coverage, and intended use. A TACO dataset **MUST** have exactly one root TORTILLA that contains all SAMPLEs.
 
@@ -78,7 +78,7 @@ TACO extends TORTILLA by adding comprehensive dataset-level metadata in a struct
 *Figure 2: TACO Core Data Model. A SAMPLE is the minimal unit, classified as a FILE (pointing to data files) or a FOLDER (pointing to TORTILLAs). TORTILLA is a collection of SAMPLEs with a uniform metadata schema. TACO extends TORTILLA by adding dataset-level COLLECTION metadata.*
 
 
-### 5.4 Hierarchical Organization
+### 5.5. Hierarchical Organization
 
 The PIT is a structural constraint that enables efficient navigation and querying of hierarchical TACO datasets. PIT enforces a regular tree structure where the position of any node uniquely determines its path from the root, eliminating the need for explicit parent-child relationship tracking.
 
@@ -105,11 +105,11 @@ All SAMPLEs at the same hierarchy level **MUST** share an identical metadata sch
 
 **Padding for irregular structures**: When datasets have missing observations, placeholder SAMPLEs with identifiers `__TACOPAD__N` are inserted to maintain PIT compliance.
 
-## 5.5 Metadata Schema
+### 5.6. Metadata Schema
 
 The TACO data model defines metadata at two levels: SAMPLE-level metadata describing individual units, and TACO-level metadata (COLLECTION) describing the dataset as a whole.
 
-### 5.5.1 SAMPLE-level Fields
+#### 5.5.1. SAMPLE-level Fields
 
 **Core fields (REQUIRED):**
 
@@ -123,7 +123,7 @@ SAMPLEs can be extended with domain-specific metadata through the extension mech
 
 TORTILLA provides an efficient mechanism for computing extension metadata over sets of SAMPLEs. When metadata computation benefits from accessing the entire dataset (e.g., statistical aggregations, spatial indexing, batch processing), TORTILLA extensions compute fields across all contained SAMPLEs simultaneously rather than individually.
 
-### 5.5.2 TACO-level Fields (COLLECTION)
+#### 5.5.2. TACO-level Fields (COLLECTION)
 
 **Core fields (REQUIRED):**
 
@@ -150,9 +150,9 @@ TACO-level extensions add dataset-wide metadata using the same namespace convent
 *Figure 4: TACO Metadata Schema Overview. SAMPLE metadata consists of core fields (id, type, path) and extension fields using namespace prefixes. TORTILLA provides efficient computation of extensions over collections of SAMPLEs. TACO metadata (COLLECTION) includes core fields for dataset identification, optional fields for additional context, and extension fields for domain-specific metadata. All levels use the same namespace-based extension mechanism.*
 
 
-# 6. PART II: PHYSICAL LAYER (Serialization)
+## 6. PHYSICAL LAYER (Serialization)
 
-## 6.1 Directory Structure
+### 6.1. Directory Structure
 
 TACO datasets follow a standardized directory structure consisting of three main components:
 
@@ -220,7 +220,7 @@ dataset/
 
 This violates PIT because level 0 contains both FOLDER SAMPLEs (tile_001, tile_002) and FILE SAMPLE (tile_003). All SAMPLEs at the same level **MUST** have the same type; this structure is invalid.
 
-### 6.2 Dual Metadata System
+### 6.2. Dual Metadata System
 
 TACO implements a dual metadata strategy to optimize for different access patterns:
 
@@ -238,8 +238,7 @@ TACO implements a dual metadata strategy to optimize for different access patter
 
 The dual system allows TACO readers to choose the optimal metadata source based on the query: consolidated metadata for global operations, local metadata for hierarchical navigation.
 
-
-### 6.3 ZIP Format
+### 6.3. ZIP Format
 
 TACO implements a cloud-optimized version of the ZIP format. The standard ZIP format requires scanning the Central Directory located at the end of the file to access internal files. TACO ZIP solves this by including a TACO_HEADER at byte position 0 that contains direct offsets to all metadata files and `COLLECTION.json`, enabling immediate access without Central Directory traversal.
 
@@ -247,7 +246,7 @@ All files in TACO ZIP archives use STORE mode (compression method = 0), meaning 
 
 When a ZIP container is created, two additional metadata columns **MUST** be generated: `internal:offset` indicating the byte offset of each SAMPLE within the ZIP file, and `internal:size` indicating the length in bytes. These columns enable direct access to individual SAMPLEs without decompressing the entire archive. The ZIP format is immutable; updating metadata requires recreating the entire ZIP file.
 
-### 6.4 FOLDER Format
+### 6.4. FOLDER Format
 
 The FOLDER format stores TACO datasets as a directory structure. Files remain directly accessible for inspection and modification without requiring extraction or decompression. This format is suitable for development environments and datasets requiring frequent updates.
 
@@ -257,7 +256,7 @@ When metadata is updated, only chunks containing modified data need to be transf
 
 Server support for CDC and chunk-level deduplication is required to achieve these performance characteristics. To our best knowledge, [Hugging Face's XET storage](https://huggingface.co/docs/xet/index) backend is currently the only public platform that provides this infrastructure for scientific datasets. 
 
-### 6.5 TACOCAT File
+### 6.5. TACOCAT File
 
 TACOCAT is a consolidated file (`__TACOCAT__`) that addresses the operational challenges of managing large collections of individual TACO ZIP files. When datasets are distributed as hundreds or thousands of separate ZIP containers, querying across the collection requires opening each file individually to access its metadata. TACOCAT solves this by consolidating all metadata from multiple ZIP files into a single high-performance container.
 
@@ -267,7 +266,7 @@ TACOCAT uses a fixed 128-byte binary header containing the format magic number, 
 
 When reading SAMPLEs, the GDAL VSI path is constructed as `/vsisubfile/{offset}_{size},{base_path}{source_file}` where offset and size reference the original position within the source ZIP file identified by source_file. This allows direct byte-range access to data without extracting or opening intermediate containers.
 
-### 6.6 TACOLLECTION File
+### 6.6. TACOLLECTION File
 
 Tacollection is a global metadata consolidation mechanism (`TACOLLECTION.json`) for datasets distributed across multiple TACO ZIP files. When large datasets are partitioned (e.g., by region or time period), each partition contains independent `COLLECTION.json` metadata. Tacollection merges these into a unified global view.
 
@@ -305,21 +304,21 @@ The `taco:sources` field preserves each partition's individual extents, enabling
 }
 ```
 
-# 7. PART III: API LAYER (Programmatic Access)
+## 7. API LAYER (Programmatic Access)
 
 The TACO API provides two tools: TacoToolbox for creating datasets and TacoReader for querying them.
 
-**TacoToolbox (Writer)** is Python-only for ease of maintenance, not technical necessity.
+- **TacoToolbox (Writer)** is Python-only for ease of maintenance, not technical necessity.
 
-**TacoReader (Reader)** is designed to be easily implemented in any language with a DataFrame interface, object-oriented classes, a lazy Parquet reader with query pushdown support, and GDAL bindings for data access. This makes TacoReader viable in R, Rust, Julia, C++, and other scientific computing languages.
+- **TacoReader (Reader)** is designed to be easily implemented in any language with a DataFrame interface, object-oriented classes, a lazy Parquet reader with query pushdown support, and GDAL bindings for data access. This makes TacoReader viable in R, Rust, Julia, C++, and other scientific computing languages.
 
 All TacoReader and TacoToolbox **MUST** conform to the core API specification defined below. Additional features beyond the specification **MUST** be implemented in separate modules to prevent fragmentation.
 
-## 7.1. TacoToolbox (Writer API)
+### 7.1. TacoToolbox (Writer API)
 
 TacoToolbox provides functionality for creating, converting, and validating TACO datasets. The API is organized around three core concepts: SAMPLE (minimal unit), TORTILLA (set of SAMPLEs), and TACO (complete dataset).
 
-### **7.1.1. Data Model Classes**
+#### 7.1.1. Data Model Classes
 
 **`datamodel.Sample`**
 
@@ -378,7 +377,7 @@ Taco(
 
 **Extent Auto-Calculation**: If extent is not provided, TACO searches incrementally through hierarchy levels for [STAC]() or [ISTAC]() metadata and computes spatial and temporal extents automatically. Defaults to global extent if no spatiotemporal metadata found.
 
-### **7.2 Extension System**
+#### 7.1.2. Extension System
 
 The extension system enables adding computed or declarative metadata to SAMPLEs, TORTILLAs, and TACOs through a unified `extend_with()` interface.
 
@@ -439,7 +438,7 @@ class TacoExtension(ABC):
 
 Extension data is added as instance attributes directly to the TACO object.
 
-### **7.3. Core Functions**
+#### 7.1.3. Core Functions
 
 **`create(taco, output, output_format="auto", **kwargs)`**
 
@@ -457,7 +456,7 @@ Creates global `TACOLLECTION.json` from multiple datasets. Validates PIT schema 
 
 Exports filtered subsets of existing TACO datasets. Format auto-detected from extension (.zip/.tacozip -> ZIP, else -> FOLDER). Uses async I/O with configurable concurrency limit for remote data sources. Preserves hierarchical structure while updating collection metadata with subset provenance tracking via `taco:subset_of` and `taco:subset_date` fields. Parquet parameters passed through kwargs.
 
-### **7.4 Format Conversion**
+#### 7.1.4. Format Conversion
 
 **`folder2zip(input, output, quiet=False, temp_dir=None, **kwargs)`**
 
@@ -467,7 +466,7 @@ Converts FOLDER format to ZIP format. Reads existing metadata from FOLDER struct
 
 Converts ZIP format to FOLDER format. Async operation with configurable limit for parallel file extraction. Uses ExportWriter wrapper providing progress bars unless quiet mode is enabled.
 
-### **7.5 Logging Control**
+#### 7.1.5. Logging Control
 
 **`verbose(level=True|"debug"|False)`**
 
@@ -477,11 +476,11 @@ Controls logging verbosity across all TacoToolbox operations. Level `True` or `"
 *Overview of TacoToolbox writer API*
 
 
-## **8. TacoReader (Reader API)**
+### 7.2. TacoReader (Reader API)
 
 TacoReader provides functionality for loading and querying TACO datasets through a lazy query interface with SQL support. The API is organized around three core concepts: TacoDataset (lazy query interface), TacoDataFrame (materialized results with navigation), and PITSchema (structural validation).
 
-### **8.1 Loading Datasets**
+#### 7.2.1. Loading Datasets
 
 **`load(path, base_path=None)`**
 
@@ -500,7 +499,7 @@ load(
 
 **TACOCAT Base Path Override**: The `base_path` parameter enables loading TACOCAT index files separate from source ZIP files. When specified, reconstructs all query views using the new base path for `/vsisubfile/` VSI path construction. Useful for distributed storage where the metadata index and data files reside in different locations.
 
-### **8.2 TacoDataset - Lazy Query Interface**
+#### 7.2.2. TacoDataset - Lazy Query Interface
 
 TacoDataset provides a STAC-like metadata container with a lazy query interface supporting SQL operations. All operations create views without materializing data until the `data` attribute is accessed.
 
@@ -521,7 +520,6 @@ The `field_schema` attribute returns a column schema dictionary from `taco:field
 
 The `collection` attribute returns complete COLLECTION.json content with all metadata as a dictionary.
 
-
 **SQL Interface**
 
 The `sql(query)` method executes an SQL query, creating a new TacoDataset instance with a lazy view. Query not executed immediately, only view created. Must use `data` as the table name, which implementations auto-replace with the current view name, enabling query chaining. Query chaining example in Python:
@@ -540,7 +538,7 @@ result = ds2.data  # Executes combined query
 
 **Cascading Joins**: Multi-level filtering uses INNER JOINs: `level0 -> level1 -> level2 -> target_level` using `internal:parent_id` foreign keys. Returns DISTINCT level0 samples whose descendants match filter criteria. JOIN strategy varies by format: ZIP/FOLDER uses parent_id referencing parent's ID string, TACOCAT uses parent_id as local index plus `internal:source_file` for disambiguation across multiple source ZIPs.
 
-### **8.3 TacoDataFrame - Hierarchical Navigation**
+#### 7.2.3. TacoDataFrame - Hierarchical Navigation
 
 TacoDataFrame wraps DataFrame with TACO-specific functionality for hierarchical navigation. Provides `read()` method for traversing nested structures.
 
@@ -580,7 +578,7 @@ child = tdf.read("sample_01") # By ID
 vsi_path = tdf.read(5)        # Returns str if FILE
 ```
 
-### **8.4 Concatenation**
+#### 7.2.4. Concatenation
 
 **`concat(datasets, column_mode="intersection")`**
 
@@ -596,7 +594,7 @@ Concatenates multiple TacoDataset instances into a single dataset with a lazy qu
 
 **View Construction**: Creates query views combining all datasets with `internal:source_file` column tracking origin dataset. Filters padding samples (`__TACOPAD__N`) from user-facing views. Constructs `internal:gdal_vsi` paths per format for data access.
 
-### **8.5 Backend System**
+#### 7.2.5. Backend System
 
 Three backends handle format-specific loading strategies, sharing a common interface through an abstract base class.
 
@@ -606,7 +604,7 @@ Three backends handle format-specific loading strategies, sharing a common inter
 
 **TacoCatBackend** reads consolidated format from multiple source ZIPs. Parses a fixed 128-byte binary header containing format magic, version, max depth, and a 7-entry index table. Loads entire file to memory (typically <1GB metadata-only). Constructs VSI paths as `/vsisubfile/{offset}_{size},{base_path}{source_file}` where `source_file` column identifies origin ZIP.
  
-### **8.6 Logging Control**
+#### 7.2.6. Logging Control
 
 **`verbose(level=True|"debug"|False)`**
 
@@ -615,7 +613,7 @@ Controls logging verbosity across all TacoReader operations. Level `True` or `"i
 ![TacoReader](/image/tacoreader.png)
 *Overview of TacoReader writer API*
 
-## **9. Version Compatibility**
+## 8. Version Compatibility
 
 TACO v2.0.0 is **NOT backward compatible** with v1.x datasets. Existing v1.x datasets **MUST** be migrated or recreated to work with v2.0.0 tools. Key breaking changes include:
 
@@ -633,7 +631,7 @@ TACO v2.0.0 is **NOT backward compatible** with v1.x datasets. Existing v1.x dat
 
 ---
 
-## **Annex A: Glossary**
+## Annex A: Glossary
 
 **Container Format**: Physical storage structure for TACO datasets. Two formats supported: ZIP (compressed archive) and FOLDER (directory structure).
 
@@ -661,7 +659,7 @@ TACO v2.0.0 is **NOT backward compatible** with v1.x datasets. Existing v1.x dat
 
 ---
 
-## **Annex B: HISTORY**
+## Annex B: HISTORY
 
 TACO was born in Valencia, Spain, at the Image and Signal Processing ([ISP](https://isp.uv.es/)) group of the Universitat de València. Every Friday, we met at [TKOTACO](https://tkotacos.com/) - a one-euro taco restaurant - to talk about series, anime, memes, data, and sometimes new deep learning papers. The regular crew was Julio Contreras, Oscar Pellicer, Simon Donike, Chen Ma ([HIT](https://en.hit.edu.cn/)), and me (@csaybar). When David Montero ([University of Leipzig](https://rsc4earth.de/)) visited, he always joined us.
 

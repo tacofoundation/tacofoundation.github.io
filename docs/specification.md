@@ -34,7 +34,6 @@ The TACO specification is guided by the following design principles:
 
 ## 4. Architecture Overview
 
-
 The TACO specification is structured around three distinct but interconnected layers, each serving a specific purpose in the complete system design (Figure 1):
 
 - Data Model Layer (Logical): Defines the abstract structure, relationships, and constraints that govern how datasets are organized. This layer specifies what constitutes a valid TACO dataset independently of how it is physically stored.
@@ -48,8 +47,7 @@ This separation of concerns enables independent evolution of each layer while ma
 ![TACO Architecture](/image/taco_three_layers.png)
 *Figure 1: TACO Three-Layer Architecture. The specification separates logical structure (Data Model), concrete serialization (Physical), and programmatic access (API).*
 
-
-## 5. DATA MODEL LAYER (Logical Structure)
+## 5. Data Model Layer
 
 ### 5.1. Core Concepts
 
@@ -76,7 +74,6 @@ TACO extends TORTILLA by adding comprehensive dataset-level metadata in a struct
 ![TACO Architecture](/image/datamodel.png)
 
 *Figure 2: TACO Core Data Model. A SAMPLE is the minimal unit, classified as a FILE (pointing to data files) or a FOLDER (pointing to TORTILLAs). TORTILLA is a collection of SAMPLEs with a uniform metadata schema. TACO extends TORTILLA by adding dataset-level COLLECTION metadata.*
-
 
 ### 5.5. Hierarchical Organization
 
@@ -149,8 +146,7 @@ TACO-level extensions add dataset-wide metadata using the same namespace convent
 ![PIT Constraint](/image/metadata_schema.png)
 *Figure 4: TACO Metadata Schema Overview. SAMPLE metadata consists of core fields (id, type, path) and extension fields using namespace prefixes. TORTILLA provides efficient computation of extensions over collections of SAMPLEs. TACO metadata (COLLECTION) includes core fields for dataset identification, optional fields for additional context, and extension fields for domain-specific metadata. All levels use the same namespace-based extension mechanism.*
 
-
-## 6. PHYSICAL LAYER (Serialization)
+## 6. Physical Layer
 
 ### 6.1. Directory Structure
 
@@ -304,7 +300,7 @@ The `taco:sources` field preserves each partition's individual extents, enabling
 }
 ```
 
-## 7. API LAYER (Programmatic Access)
+## 7. API Layer
 
 The TACO API provides two tools: TacoToolbox for creating datasets and TacoReader for querying them.
 
@@ -474,7 +470,6 @@ Controls logging verbosity across all TacoToolbox operations. Level `True` or `"
 
 ![PIT Constraint](/image/tacotoolbox.png)
 *Overview of TacoToolbox writer API*
-
 
 ### 7.2. TacoReader (Reader API)
 

@@ -1,55 +1,55 @@
 {
-  "hash": "b6f7d3b2",
-  "configHash": "ed320bd7",
+  "hash": "29018fd1",
+  "configHash": "4fb7d76c",
   "lockfileHash": "064230e4",
-  "browserHash": "462f7c68",
+  "browserHash": "0c999075",
   "optimized": {
     "vue": {
       "src": "../../../../node_modules/vue/dist/vue.runtime.esm-bundler.js",
       "file": "vue.js",
-      "fileHash": "a0694c10",
+      "fileHash": "86f3e6ee",
       "needsInterop": false
     },
     "vitepress > @vue/devtools-api": {
       "src": "../../../../node_modules/@vue/devtools-api/dist/index.js",
       "file": "vitepress___@vue_devtools-api.js",
-      "fileHash": "b76c430c",
+      "fileHash": "74e66231",
       "needsInterop": false
     },
     "vitepress > @vueuse/core": {
       "src": "../../../../node_modules/@vueuse/core/index.mjs",
       "file": "vitepress___@vueuse_core.js",
-      "fileHash": "b0cdec82",
+      "fileHash": "d806b5c9",
       "needsInterop": false
     },
     "lucide-vue-next": {
       "src": "../../../../node_modules/lucide-vue-next/dist/esm/lucide-vue-next.js",
       "file": "lucide-vue-next.js",
-      "fileHash": "154e1c7f",
+      "fileHash": "d16c22c8",
       "needsInterop": false
     },
     "@fortawesome/fontawesome-svg-core": {
       "src": "../../../../node_modules/@fortawesome/fontawesome-svg-core/index.mjs",
       "file": "@fortawesome_fontawesome-svg-core.js",
-      "fileHash": "338504aa",
+      "fileHash": "c653828d",
       "needsInterop": false
     },
     "@fortawesome/free-brands-svg-icons": {
       "src": "../../../../node_modules/@fortawesome/free-brands-svg-icons/index.mjs",
       "file": "@fortawesome_free-brands-svg-icons.js",
-      "fileHash": "ebda29c3",
+      "fileHash": "010ff85d",
       "needsInterop": false
     },
     "@fortawesome/free-solid-svg-icons": {
       "src": "../../../../node_modules/@fortawesome/free-solid-svg-icons/index.mjs",
       "file": "@fortawesome_free-solid-svg-icons.js",
-      "fileHash": "02fd54d1",
+      "fileHash": "6513dbdf",
       "needsInterop": false
     },
     "@fortawesome/vue-fontawesome": {
       "src": "../../../../node_modules/@fortawesome/vue-fontawesome/index.es.js",
       "file": "@fortawesome_vue-fontawesome.js",
-      "fileHash": "923c05f5",
+      "fileHash": "df29022e",
       "needsInterop": false
     }
   },

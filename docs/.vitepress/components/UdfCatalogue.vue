@@ -19,6 +19,7 @@ const closeUdf = () => {
 }
 </script>
 
+<!--
 <template>
   <div class="p-4">
     <div v-if="!selected" class="flex flex-wrap gap-6 justify-center">
@@ -76,6 +77,7 @@ const closeUdf = () => {
     </div>
   </div>
 </template>
+-->
 
 
 <style scoped>

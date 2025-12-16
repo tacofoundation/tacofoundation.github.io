@@ -19,9 +19,16 @@ export default defineConfig({
       { text: 'Documentation', link: '/documentation' },
       { text: 'Contributing', link: '/contribute' },
       { text: 'Catalog', link: '/catalogue' },
-      { text: 'Publications', link: '/publications'    },
+      {
+        text: 'MethaneSET',
+        items: [
+          { text: 'MethaneSET-S2', link: '/catalogue/MethaneSET-S2/' },
+          { text: 'MethaneSET-L89', link: '/catalogue/MethaneSET-L89/' }
+        ]
+      },
+      { text: 'Publications', link: '/publications' },
 
-      
+
     ],
 
     sidebar: {
